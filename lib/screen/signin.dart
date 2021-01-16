@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
-import 'package:newkodenames/loading.dart';
+import 'package:newkodenames/Loading.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -88,8 +88,15 @@ class _SignInState extends State<SignIn> {
                   ),
                   RaisedButton(
                     onPressed: () async {
+                      setState(() {
+                        loading = true;
+                      });
+
                       await _auth.singInAnon();
-                      print('Anon sign');
+
+                      setState(() {
+                        loading = false;
+                      });
                     },
                     color: Colors.pink,
                     child: Text(

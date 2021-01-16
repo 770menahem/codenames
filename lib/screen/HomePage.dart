@@ -35,32 +35,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
             (user != null) ? GameMenu() : SignIn(),
-            // FlatButton(
-            //   color: Colors.indigo[50],
-            //   onPressed: () {
-            //     if (user == null) {
-            //       Navigator.pushNamed(context, "/signin");
-            //     } else {
-            //       Navigator.pushNamed(context, '/gameMenu');
-            //       // Navigator.pop(context);
-            //     }
-            //   },
-            //   child: Text("הצטרף לשחק"),
-            // ),
-            // FlatButton(
-            //   color: Colors.indigo[50],
-            //   onPressed: () {
-            //     Navigator.pushNamed(context, "/addWord");
-            //   },
-            //   child: Text("צור/הסר מילים"),
-            // ),
-            // FlatButton(
-            //   color: Colors.indigo[50],
-            //   onPressed: () {
-            //     Navigator.pushNamed(context, "/signin");
-            //   },
-            //   child: Text("auth"),
-            // ),
           ],
         ),
       ),

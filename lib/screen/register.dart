@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newkodenames/loading.dart';
+import 'package:newkodenames/Loading.dart';
 
 import '../firebase/service/authService.dart';
 

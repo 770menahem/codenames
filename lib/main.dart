@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'screen/signin.dart';
 import 'screen/AddWord.dart';
 import 'screen/Game.dart';
+import 'Loading.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
           "/signin": (BuildContext context) => SignIn(),
           "/register": (BuildContext context) => Register(),
           "/gameMenu": (BuildContext context) => GameMenu(),
+          "/loading": (BuildContext context) => Loading(),
         },
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/widget/InputClue.dart';
+import 'package:provider/provider.dart';
 
 import '../Const.dart';
 
@@ -34,7 +35,7 @@ class MangerButton extends StatelessWidget {
                 children: [
                   FlatButton(
                     color: Colors.amberAccent,
-                    child: showMap ? Text("הסתר מפה") : Text("מפה"),
+                    child: showMap ? Text("הסתר מפה") : Text("הצג מפה"),
                     onPressed: () {
                       this.handleShowMap();
                     },
