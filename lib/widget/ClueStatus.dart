@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import '../Const.dart';
 
 class ClueStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final numToFind = Provider.of<WordToFind>(context).num;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Text(
-          "רמז: $clue",
+          "רמז: ${clue.clue}",
           textDirection: TextDirection.rtl,
           style: TextStyle(
             fontSize: 24,

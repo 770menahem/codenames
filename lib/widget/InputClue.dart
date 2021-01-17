@@ -1,21 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
 import '../Const.dart';
 
 class InputClue extends StatelessWidget {
   final Function setNum;
-  final Function setClue;
   final Function submit;
-  final int pointLeft;
 
   const InputClue({
     Key key,
     @required this.setNum,
-    @required this.setClue,
     @required this.submit,
-    @required this.pointLeft,
   }) : super(key: key);
 
   @override
@@ -24,14 +21,14 @@ class InputClue extends StatelessWidget {
       color: Colors.amberAccent,
       child: Text("רמז"),
       onPressed: () {
-        clueForm(context, setNum, setClue, submit, pointLeft);
+        clueForm(context, setNum, submit, groupPoints.point[currUser.group]);
       },
     );
   }
 }
 
-clueForm(BuildContext context, Function setNum, Function setClue,
-    Function submit, int pointLeft) {
+clueForm(
+    BuildContext context, Function setNum, Function submit, int pointLeft) {
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController clueController = TextEditingController();
   TextEditingController numController = TextEditingController();
@@ -46,6 +43,8 @@ clueForm(BuildContext context, Function setNum, Function setClue,
   showDialog(
     context: context,
     builder: (BuildContext context) {
+      final clue = Provider.of<Clue>(context);
+
       return AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -60,10 +59,9 @@ clueForm(BuildContext context, Function setNum, Function setClue,
                 textDirection: TextDirection.rtl,
                 controller: clueController,
                 validator: (value) =>
-                   value.split(" ").length == 1 && value.isNotEmpty
-                      ? null
-                      : "הכנס מילה אחת"
-                ,
+                    value.split(" ").length == 1 && value.isNotEmpty
+                        ? null
+                        : "הכנס מילה אחת",
                 decoration: InputDecoration(
                   hintText: "הכנס רמז",
                 ),
@@ -98,7 +96,7 @@ clueForm(BuildContext context, Function setNum, Function setClue,
             onPressed: () {
               if (key.currentState.validate()) {
                 setNum(int.parse(numController.text));
-                setClue(clueController.text);
+                clue.change(clueController.text);
                 print(clue);
                 submit();
                 Navigator.of(context).pop();

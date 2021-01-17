@@ -7,6 +7,7 @@ import 'package:newkodenames/screen/HomePage.dart';
 import 'package:newkodenames/screen/register.dart';
 import 'package:provider/provider.dart';
 
+import 'Const.dart';
 import 'screen/signin.dart';
 import 'screen/AddWord.dart';
 import 'screen/Game.dart';
@@ -21,8 +22,14 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<MyUser>.value(
-      value: AuthService().user,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Showmap>(create: (_) => showmap),
+        ChangeNotifierProvider<GroupPoint>(create: (_) => groupPoints),
+        ChangeNotifierProvider<WordToFind>(create: (_) => wordToFind),
+        ChangeNotifierProvider<Clue>(create: (_) => clue),
+        StreamProvider<MyUser>.value(value: AuthService().user),
+      ],
       child: MaterialApp(
         title: 'code names',
         debugShowCheckedModeBanner: false,

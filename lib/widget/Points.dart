@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Const.dart';
 
@@ -26,11 +27,13 @@ class Points extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final point = Provider.of<GroupPoint>(context).points;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        points(color[0], groupPoint[0]),
-        points(color[1], groupPoint[1]),
+        points(color[0], point[0]),
+        points(color[1], point[1]),
       ],
     );
   }

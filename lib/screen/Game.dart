@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
-import 'package:newkodenames/obj/MyUser.dart';
 import 'package:newkodenames/widget/ClueStatus.dart';
 import 'package:newkodenames/obj/words.dart';
 import 'package:provider/provider.dart';
@@ -31,31 +30,23 @@ class _GameState extends State<Game> {
     print(AuthService().name);
 
     setState(() {
-      groupPoint = [9, 8];
+      groupPoints.points = [9, 8];
       playerTurn = 0;
       groupTurn = 0;
       isGameOver = false;
-      showMap = false;
+      showmap.showMap = false;
       hasLeft = false;
-      numToFind = 0;
-      clue = "";
+      wordToFind.change(0);
+      clue.change("");
       leftToGuess = [0, 0];
       words = WordObj().getWordObj();
       currUser = users[0][0];
     });
   }
 
-  _setClue(String newClue) {
-    setState(() {
-      clue = newClue;
-    });
-  }
-
-  _setShowMap() {
-    setState(() {
-      showMap = !showMap;
-    });
-  }
+  // _setClue(String newClue) {
+  //   clue.change(newClue);
+  // }
 
   _chooseCard(WordObj word) {
     if (currUser.role != captain) {
@@ -72,7 +63,6 @@ class _GameState extends State<Game> {
     if (!isGameOver) {
       setState(() {
         playerTurn = (playerTurn + 1);
-        if (showMap == true) showMap = false;
         if (playerTurn == users[groupTurn].length) {
           playerTurn = 0;
           groupTurn = (groupTurn + 1) % users.length;
@@ -83,11 +73,9 @@ class _GameState extends State<Game> {
     }
   }
 
-  _checkGameOver(WordObj w) {
-    if (w.color == color[2]) {
-      setState(() {
-        isGameOver = true;
-      });
+  _checkGameOver(WordObj word) {
+    if (word.color == color[2]) {
+      isGameOver = true;
 
       endGameMsg(
           context,
@@ -97,12 +85,6 @@ class _GameState extends State<Game> {
     }
   }
 
-  _setLeftToGuess(int num) {
-    setState(() {
-      leftToGuess[currUser.group] += num;
-    });
-  }
-
   _numToFind(int num) {
     bool left = false;
 
@@ -110,44 +92,41 @@ class _GameState extends State<Game> {
       num++;
       left = true;
 
-      _setLeftToGuess(-1);
+      groupPoints.change(-1);
     }
+
+    wordToFind.change(num);
 
     setState(() {
       hasLeft = left;
-      numToFind = num;
     });
   }
 
   _handleChoice(WordObj word) {
     if (word.color != color[currUser.group]) {
-      _setLeftToGuess(numToFind);
+      groupPoints.change(wordToFind.num);
     }
 
     if (word.color == color[0]) {
-      groupPoint[0]--;
+      groupPoints.points[0]--;
     } else if (word.color == color[1]) {
-      groupPoint[1]--;
+      groupPoints.points[1]--;
     }
 
     if (!isGameOver) {
-      if (groupPoint[0] == 0) {
+      if (groupPoints.points[0] == 0) {
         endGameMsg(context, _newGame, "you win", color[0]);
-      } else if (groupPoint[1] == 0) {
+      } else if (groupPoints.points[1] == 0) {
         endGameMsg(context, _newGame, "you win", color[1]);
       }
     }
 
-    if ((word.color != color[currUser.group] || numToFind == 1)) {
+    if ((word.color != color[currUser.group] || wordToFind.num == 1)) {
       _incrementTurn();
-      _setClue("");
-      setState(() {
-        numToFind = 0;
-      });
+      clue.change("");
+      wordToFind.change(0);
     } else {
-      setState(() {
-        numToFind--;
-      });
+      wordToFind.change(wordToFind.num - 1);
     }
   }
 
@@ -188,15 +167,16 @@ class _GameState extends State<Game> {
                 SizedBox(
                   height: 160,
                   width: 160,
-                  child: showMap ? CaptainMap(words: words) : null,
+                  child: Provider.of<Showmap>(context).show &&
+                          currUser.role == captain
+                      ? CaptainMap(words: words)
+                      : null,
                 ),
                 MangerButton(
                   newGame: this._newGame,
-                  handleShowMap: this._setShowMap,
                   incrementTurn: _incrementTurn,
                   setNum: _numToFind,
-                  setClue: _setClue,
-                  pointLeft: groupPoint[currUser.group],
+                  // setClue: _setClue,
                 ),
               ],
             ),

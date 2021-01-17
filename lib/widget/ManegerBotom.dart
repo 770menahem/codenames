@@ -7,24 +7,20 @@ import '../Const.dart';
 
 class MangerButton extends StatelessWidget {
   final Function newGame;
-  final Function handleShowMap;
   final Function incrementTurn;
   final Function setNum;
-  final Function setClue;
-  final int pointLeft;
 
   const MangerButton({
     Key key,
     @required this.newGame,
-    @required this.handleShowMap,
     @required this.incrementTurn,
     @required this.setNum,
-    @required this.setClue,
-    @required this.pointLeft,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final showmap = context.watch<Showmap>();
+
     return Column(
       children: [
         SizedBox(
@@ -34,24 +30,23 @@ class MangerButton extends StatelessWidget {
             ? Column(
                 children: [
                   FlatButton(
+                    minWidth: 110.0,
                     color: Colors.amberAccent,
-                    child: showMap ? Text("הסתר מפה") : Text("הצג מפה"),
+                    child: showmap.show ? Text("הסתר מפה") : Text("הצג מפה"),
                     onPressed: () {
-                      this.handleShowMap();
+                      showmap.change();
                     },
                   ),
                   InputClue(
                     setNum: this.setNum,
-                    setClue: setClue,
                     submit: this.incrementTurn,
-                    pointLeft: pointLeft,
                   ),
                 ],
               )
             : FlatButton(
                 color: Colors.blueGrey,
                 onPressed: () {
-                  leftToGuess[currUser.group] += numToFind;
+                  leftToGuess[currUser.group] += wordToFind.num;
                   this.incrementTurn();
                 },
                 child: Text('סיים תור'),
