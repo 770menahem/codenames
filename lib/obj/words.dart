@@ -135,28 +135,28 @@ class WordObj {
     int i = 0;
 
     while (gameWord.length < 25) {
-      WordObj word = WordObj(
-        word: allWords[i],
-        color: null,
-      );
-
-      if (gameWord.length == 0 || !gameWord.contains(word)) {
-        i++;
-        gameWord.add(word);
+      if (gameWord.length == 0 || !gameWord.contains(allWords[i])) {
+        gameWord.add(WordObj(
+          word: allWords[i],
+        ));
       }
+
+      i = i + 1 % allWords.length;
     }
 
-    for (var i = 0; i < gameWord.length; i++) {
-      gameWord[i].color = i < 9
-          ? colors[0]
-          : i < 17
-              ? colors[1]
-              : i == 17
-                  ? colors[2]
-                  : colors[3];
-
-      gameWord[i].choose = false;
+    for (i = 0; i < gameWord.length; i++) {
+      gameWord[i].color = colors[3];
     }
+
+    for (i = 0; i < 9; i++) {
+      gameWord[i].color = colors[0];
+    }
+
+    for (i = i; i < 17; i++) {
+      gameWord[i].color = colors[1];
+    }
+
+    gameWord[i].color = colors[2];
 
     gameWord.shuffle();
 

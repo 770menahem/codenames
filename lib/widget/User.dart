@@ -8,6 +8,7 @@ class User extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userName = Provider.of<MyUser>(context).name;
+    final playerTurn = Provider.of<GroupPoint>(context).playerTurn;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

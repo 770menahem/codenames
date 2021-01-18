@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/obj/words.dart';
 
-class MyCard extends StatelessWidget {
+class MyCard extends StatefulWidget {
   final WordObj word;
   final Function onChoose;
 
@@ -12,10 +12,19 @@ class MyCard extends StatelessWidget {
     @required this.onChoose,
   }) : super(key: key);
 
+  @override
+  _MyCardState createState() => _MyCardState();
+}
+
+class _MyCardState extends State<MyCard> {
   checkIfChoose() {
-    if (!word.choose) {
-      print(word.word);
-      this.onChoose(word);
+    if (!widget.word.choose) {
+      print(widget.word.word);
+      this.widget.onChoose(widget.word);
+
+      setState(() {
+        widget.word.choose = !widget.word.choose;
+      });
     }
   }
 
@@ -33,11 +42,13 @@ class MyCard extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: this.word.choose ? this.word.color : Colors.yellow[100],
+            color: this.widget.word.choose
+                ? this.widget.word.color
+                : Colors.yellow[100],
           ),
           child: Center(
             child: Text(
-              word.word,
+              widget.word.word,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,

@@ -19,7 +19,7 @@ class MangerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showmap = context.watch<Showmap>();
+    final showmap = context.watch<GroupPoint>().show;
 
     return Column(
       children: [
@@ -32,9 +32,9 @@ class MangerButton extends StatelessWidget {
                   FlatButton(
                     minWidth: 110.0,
                     color: Colors.amberAccent,
-                    child: showmap.show ? Text("הסתר מפה") : Text("הצג מפה"),
+                    child: showmap ? Text("הסתר מפה") : Text("הצג מפה"),
                     onPressed: () {
-                      showmap.change();
+                      groupPoints.changeShowMap();
                     },
                   ),
                   InputClue(
@@ -46,7 +46,7 @@ class MangerButton extends StatelessWidget {
             : FlatButton(
                 color: Colors.blueGrey,
                 onPressed: () {
-                  leftToGuess[currUser.group] += wordToFind.num;
+                  leftToGuess[currUser.group] += groupPoints.wordToFind;
                   this.incrementTurn();
                 },
                 child: Text('סיים תור'),

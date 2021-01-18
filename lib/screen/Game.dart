@@ -29,31 +29,17 @@ class _GameState extends State<Game> {
     print("new game");
     print(AuthService().name);
 
-    setState(() {
-      groupPoints.points = [9, 8];
-      playerTurn = 0;
-      groupTurn = 0;
-      isGameOver = false;
-      showmap.showMap = false;
-      hasLeft = false;
-      wordToFind.change(0);
-      clue.change("");
-      leftToGuess = [0, 0];
-      words = WordObj().getWordObj();
-      currUser = users[0][0];
-    });
+    groupPoints.reset();
+    words = WordObj().getWordObj();
+    groupTurn = 0;
+    isGameOver = false;
+    hasLeft = false;
+    leftToGuess = [0, 0];
+    currUser = users[0][0];
   }
-
-  // _setClue(String newClue) {
-  //   clue.change(newClue);
-  // }
 
   _chooseCard(WordObj word) {
     if (currUser.role != captain) {
-      setState(() {
-        word.choose = !word.choose;
-      });
-
       _checkGameOver(word);
       _handleChoice(word);
     }
@@ -61,15 +47,14 @@ class _GameState extends State<Game> {
 
   _incrementTurn() {
     if (!isGameOver) {
-      setState(() {
-        playerTurn = (playerTurn + 1);
-        if (playerTurn == users[groupTurn].length) {
-          playerTurn = 0;
-          groupTurn = (groupTurn + 1) % users.length;
-        }
+      groupPoints.hideMap();
 
-        currUser = users[groupTurn][playerTurn];
-      });
+      groupPoints.setPlayerTurn = (groupPoints.playerTurn + 1);
+      if (groupPoints.playerTurn == users[groupTurn].length) {
+        groupPoints.setPlayerTurn = 0;
+        groupTurn = (groupTurn + 1) % users.length;
+      }
+      currUser = users[groupTurn][groupPoints.playerTurn];
     }
   }
 
@@ -86,25 +71,19 @@ class _GameState extends State<Game> {
   }
 
   _numToFind(int num) {
-    bool left = false;
+    hasLeft = false;
 
     if (leftToGuess[currUser.group] > 0) {
       num++;
-      left = true;
-
-      groupPoints.change(-1);
+      hasLeft = true;
     }
 
-    wordToFind.change(num);
-
-    setState(() {
-      hasLeft = left;
-    });
+    groupPoints.setWordToFind(num);
   }
 
   _handleChoice(WordObj word) {
     if (word.color != color[currUser.group]) {
-      groupPoints.change(wordToFind.num);
+      groupPoints.updateWordToFind(groupPoints.wordToFind);
     }
 
     if (word.color == color[0]) {
@@ -121,12 +100,12 @@ class _GameState extends State<Game> {
       }
     }
 
-    if ((word.color != color[currUser.group] || wordToFind.num == 1)) {
+    if ((word.color != color[currUser.group] || groupPoints.wordToFind == 1)) {
       _incrementTurn();
-      clue.change("");
-      wordToFind.change(0);
+      groupPoints.setClue("");
+      groupPoints.setWordToFind(0);
     } else {
-      wordToFind.change(wordToFind.num - 1);
+      groupPoints.setWordToFind(groupPoints.wordToFind - 1);
     }
   }
 
@@ -167,7 +146,7 @@ class _GameState extends State<Game> {
                 SizedBox(
                   height: 160,
                   width: 160,
-                  child: Provider.of<Showmap>(context).show &&
+                  child: Provider.of<GroupPoint>(context).show &&
                           currUser.role == captain
                       ? CaptainMap(words: words)
                       : null,

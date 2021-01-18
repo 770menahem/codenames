@@ -6,13 +6,13 @@ import '../Const.dart';
 class ClueStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final numToFind = Provider.of<WordToFind>(context).num;
+    final numToFind = Provider.of<GroupPoint>(context).wordToFind;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Text(
-          "רמז: ${clue.clue}",
+          "רמז: ${groupPoints.clue}",
           textDirection: TextDirection.rtl,
           style: TextStyle(
             fontSize: 24,

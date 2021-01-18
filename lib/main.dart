@@ -24,10 +24,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<Showmap>(create: (_) => showmap),
+        // ChangeNotifierProvider<Showmap>(create: (_) => showmap),
         ChangeNotifierProvider<GroupPoint>(create: (_) => groupPoints),
-        ChangeNotifierProvider<WordToFind>(create: (_) => wordToFind),
-        ChangeNotifierProvider<Clue>(create: (_) => clue),
+        // ChangeNotifierProvider<WordToFind>(create: (_) => wordToFind),
+        // ChangeNotifierProvider<Clue>(create: (_) => clue),
         StreamProvider<MyUser>.value(value: AuthService().user),
       ],
       child: MaterialApp(
