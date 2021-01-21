@@ -4,7 +4,10 @@ import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/MyUser.dart';
 import 'package:newkodenames/screen/GameMenu.dart';
 import 'package:newkodenames/screen/HomePage.dart';
+import 'package:newkodenames/screen/JoinRoom.dart';
+import 'package:newkodenames/screen/NewRoom.dart';
 import 'package:newkodenames/screen/register.dart';
+import 'package:newkodenames/screen/rolesOption.dart';
 import 'package:provider/provider.dart';
 
 import 'Const.dart';
@@ -24,10 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // ChangeNotifierProvider<Showmap>(create: (_) => showmap),
         ChangeNotifierProvider<GroupPoint>(create: (_) => groupPoints),
-        // ChangeNotifierProvider<WordToFind>(create: (_) => wordToFind),
-        // ChangeNotifierProvider<Clue>(create: (_) => clue),
         StreamProvider<MyUser>.value(value: AuthService().user),
       ],
       child: MaterialApp(
@@ -46,6 +46,9 @@ class MyApp extends StatelessWidget {
           "/register": (BuildContext context) => Register(),
           "/gameMenu": (BuildContext context) => GameMenu(),
           "/loading": (BuildContext context) => Loading(),
+          "/roles": (BuildContext context) => RoleOption(),
+          "/newroom": (BuildContext context) => NewRoom(),
+          "/joinroom": (BuildContext context) => JoinRoom(),
         },
       ),
     );

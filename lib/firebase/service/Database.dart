@@ -1,48 +1,54 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:newkodenames/obj/MyUser.dart';
+import 'package:newkodenames/Const.dart';
+import 'package:newkodenames/firebase/service/authService.dart';
 
 class DatabadeService {
-  final String uid;
-  DatabadeService(this.uid);
-
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('codename');
 
-  Future createRoom(MyUser user, String name) async {
-    return await collection.doc(name).set({
-      'onner': user.name,
-      'blueGroup': {
-        'captain': '',
-        'gessers': [],
-      },
-      'redGroup': {
-        'captain': '',
-        'gessers': [],
-      },
-    });
+  Future createRoom(String name) async {
+    final user = AuthService().user;
+    gameRoom.setOnner();
+    print(user);
+
+    final snap = await collection.doc(name).get();
+
+    if (!snap.exists) {
+      print("name " + name);
+      await collection.doc(name).set({
+        'onner': user,
+        'blueGroup': {
+          'captain': '',
+          'gessers': [],
+        },
+        'redGroup': {
+          'captain': '',
+          'gessers': [],
+        },
+      });
+
+      final room = await collection.doc(name).get();
+      return room.exists;
+    } else {
+      return false;
+    }
   }
 
-  Future addCaptain(MyUser user, String room, String group) async {
+  Future addCaptain(String room, String group) async {
+    final user = AuthService().user;
+    print("sada");
     return await collection.doc(room).set({
-      group: {
-        'captain': {
-          'uid': user.uid,
-          'name': user.name,
-        }
-      },
+      group: {'captain': user},
     });
   }
 
-  Future addGesser(MyUser user, String room, String group) async {
-    var roo = await collection.doc(room).snapshots().toList();
+  Future addGesser(String room, String group) async {
+    final user = AuthService().user;
 
     return await collection.doc(room).update({
-      'gesser': [
-        {
-          'uid': user.uid,
-          'name': user.name,
-        }
-      ]
+      group: {
+        'gesser': FieldValue.arrayUnion([user])
+      }
     });
   }
 

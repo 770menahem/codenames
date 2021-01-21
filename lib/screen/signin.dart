@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/Loading.dart';
+import 'package:newkodenames/widget/Guest.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -40,6 +41,16 @@ class _SignInState extends State<SignIn> {
       },
     );
 
+    void loadingStatus(bool con) {
+      setState(() {
+        loading = con;
+      });
+    }
+
+    void errorMsg(String msg) {
+      error = msg;
+    }
+
     SizedBox space = SizedBox(height: 20.0);
 
     return loading
@@ -60,18 +71,14 @@ class _SignInState extends State<SignIn> {
                   RaisedButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        setState(() {
-                          loading = true;
-                        });
+                        loadingStatus(true);
 
                         dynamic res = await _auth.signInWithEmailAndPassword(
                             email, password);
 
                         if (res == null) {
-                          setState(() {
-                            loading = false;
-                            error = 'ההתחברות נכשלה נסה שוב';
-                          });
+                          errorMsg('ההתחברות נכשלה נסה שוב');
+                          loadingStatus(false);
                         }
                       }
                     },
@@ -86,23 +93,10 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                   ),
-                  RaisedButton(
-                    onPressed: () async {
-                      setState(() {
-                        loading = true;
-                      });
-
-                      await _auth.singInAnon();
-
-                      setState(() {
-                        loading = false;
-                      });
-                    },
-                    color: Colors.pink,
-                    child: Text(
-                      'היכנס כאורח',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                  Guest(
+                    auth: _auth,
+                    loading: loadingStatus,
+                    error: errorMsg,
                   ),
                   RaisedButton(
                     onPressed: () async {

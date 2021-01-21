@@ -14,16 +14,16 @@ class GameMenu extends StatelessWidget {
           FlatButton(
             color: Colors.indigo[50],
             onPressed: () {
-              Navigator.pushNamed(context, '/game');
+              Navigator.pushNamed(context, '/joinroom');
             },
             child: Text("היכנס למשחק"),
           ),
           FlatButton(
             color: Colors.indigo[50],
             onPressed: () {
-              Navigator.pushNamed(context, "/addWord");
+              Navigator.pushNamed(context, "/newroom");
             },
-            child: Text("התחל משחק"),
+            child: Text("צור משחק"),
           ),
           FlatButton(
             color: Colors.indigo[50],
