@@ -1,35 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
+import 'package:newkodenames/obj/MyUser.dart';
 
 class DatabadeService {
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('codename');
 
   Future createRoom(String name) async {
-    final user = AuthService().user;
-    gameRoom.setOnner();
-    print(user);
+    try {
+      final MyUser user = await AuthService().cuurUser;
 
-    final snap = await collection.doc(name).get();
+      print(user);
 
-    if (!snap.exists) {
-      print("name " + name);
-      await collection.doc(name).set({
-        'onner': user,
-        'blueGroup': {
-          'captain': '',
-          'gessers': [],
-        },
-        'redGroup': {
-          'captain': '',
-          'gessers': [],
-        },
-      });
+      DocumentReference snap = collection.doc(name);
 
-      final room = await collection.doc(name).get();
-      return room.exists;
-    } else {
+      if (snap != null) {
+        await collection.doc(name).set({
+          'onner': {
+            "id": user.uid,
+            "name": user.name,
+          },
+          'blueGroup': {
+            'captain': '',
+            'gessers': [],
+          },
+          'redGroup': {
+            'captain': '',
+            'gessers': [],
+          },
+        });
+
+        final room = await collection.doc(name).get();
+        return room.exists;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
       return false;
     }
   }

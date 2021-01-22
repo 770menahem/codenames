@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newkodenames/firebase/service/Database.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/MyUser.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ bool hasLeft;
 List leftToGuess;
 List words;
 UserObj currUser;
+String roomName;
 const String captain = "captain";
 final GroupPoint groupPoints = GroupPoint();
 final gameRoom = Room();
@@ -19,6 +21,7 @@ final gameRoom = Room();
 class Room {
   Map _room = {
     'onner': '',
+    'name': '',
     'blueGroup': {
       'captain': '',
       'gessers': [],
@@ -31,18 +34,59 @@ class Room {
 
   get room => this._room;
 
-  void setOnner() => this._room['onner'] = AuthService().user;
+  dynamic setOnner() async {
+    dynamic res = await DatabadeService().createRoom(roomName);
+    if (res) {
+      MyUser user = AuthService().cuurUser;
+      this._room['onner'] = {
+        'id': user.uid,
+        "name": user.name,
+      };
+      return res;
+    } else {
+      return null;
+    }
+  }
 
-  void setCaptainToBlue() =>
+  dynamic setCaptainToBlue() async {
+    dynamic res = await DatabadeService().addCaptain(roomName, 'blueGroup');
+    if (res != null) {
       this._room['blueGroup']['captain'] = AuthService().user;
+      return res;
+    } else {
+      return null;
+    }
+  }
 
-  void setCaptainToRed() => this._room['onner'] = AuthService().user;
+  dynamic setCaptainToRed() async {
+    dynamic res = await DatabadeService().addCaptain(roomName, 'redGroup');
+    if (res != null) {
+      this._room['onner'] = AuthService().user;
+      return res;
+    } else {
+      return null;
+    }
+  }
 
-  void addGesserToBlue() =>
+  dynamic addGesserToBlue() async {
+    dynamic res = await DatabadeService().addGesser(roomName, "blueGroup");
+    if (res != null) {
       this._room['blueGroup']['gessers'].add(AuthService().user);
+      return res;
+    } else {
+      return null;
+    }
+  }
 
-  void addGesserToRed() =>
+  dynamic addGesserToRed() async {
+    dynamic res = await DatabadeService().addGesser(roomName, "redGroup");
+    if (res != null) {
       this._room['redGroup']['gessers'].add(AuthService().user);
+      return res;
+    } else {
+      return null;
+    }
+  }
 }
 
 class GroupPoint with ChangeNotifier {

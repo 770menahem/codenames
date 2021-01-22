@@ -12,9 +12,9 @@ class AuthService {
     return _auth.authStateChanges().map(_userFromFBUser);
   }
 
-  String get name {
-    return _auth.currentUser.displayName;
-  }
+  dynamic get cuurUser => _auth.currentUser;
+
+  String get name => _auth.currentUser.displayName;
 
   Future singInAnon() async {
     try {

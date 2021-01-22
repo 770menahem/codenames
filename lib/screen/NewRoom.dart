@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newkodenames/firebase/service/Database.dart';
-import 'package:newkodenames/firebase/service/authService.dart';
+import 'package:newkodenames/Const.dart';
 
 class NewRoom extends StatefulWidget {
   @override
@@ -9,10 +8,10 @@ class NewRoom extends StatefulWidget {
 }
 
 class _NewRoomState extends State<NewRoom> {
-  final AuthService _auth = AuthService();
-  final DatabadeService db = DatabadeService();
+  // final AuthService _auth = AuthService();
+  // final DatabadeService db = DatabadeService();
 
-  String name = '';
+  // String name = '';
   String error = '';
   bool loading = false;
 
@@ -46,7 +45,7 @@ class _NewRoomState extends State<NewRoom> {
                 validator: (val) => val.isEmpty ? 'הכנס שם' : null,
                 onChanged: (val) {
                   setState(() {
-                    name = val;
+                    roomName = val;
                   });
                 },
               ),
@@ -60,8 +59,8 @@ class _NewRoomState extends State<NewRoom> {
                       loading = true;
                     });
 
-                    print(name);
-                    dynamic result = await db.createRoom(name);
+                    print(roomName);
+                    dynamic result = await gameRoom.setOnner();
 
                     if (result == null) {
                       setState(() {
