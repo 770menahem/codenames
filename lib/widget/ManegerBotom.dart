@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/InputClue.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +35,7 @@ class MangerButton extends StatelessWidget {
                     color: Colors.amberAccent,
                     child: showmap ? Text("הסתר מפה") : Text("הצג מפה"),
                     onPressed: () {
-                      groupPoints.changeShowMap();
+                      GroupPoint().changeShowMap();
                     },
                   ),
                   InputClue(
@@ -46,7 +47,7 @@ class MangerButton extends StatelessWidget {
             : FlatButton(
                 color: Colors.blueGrey,
                 onPressed: () {
-                  leftToGuess[currUser.group] += groupPoints.wordToFind;
+                  leftToGuess[currUser.group] += GroupPoint().wordToFind;
                   this.incrementTurn();
                 },
                 child: Text('סיים תור'),

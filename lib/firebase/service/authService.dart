@@ -20,7 +20,7 @@ class AuthService {
     try {
       UserCredential res = await _auth.signInAnonymously();
       User user = res.user;
-      user.updateProfile(displayName: 'אורח' + user.uid.substring(0, 2));
+      await user.updateProfile(displayName: 'אורח' + user.uid.substring(0, 2));
       return _userFromFBUser(user);
     } catch (e) {
       print(e.toString());

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/ClueStatus.dart';
 import 'package:newkodenames/obj/words.dart';
 import 'package:provider/provider.dart';
@@ -29,13 +30,15 @@ class _GameState extends State<Game> {
     print("new game");
     print(AuthService().name);
 
-    groupPoints.reset();
-    words = WordObj().getWordObj();
-    groupTurn = 0;
-    isGameOver = false;
-    hasLeft = false;
-    leftToGuess = [0, 0];
-    currUser = users[0][0];
+    setState(() {
+      GroupPoint().reset();
+      words = WordObj().getWordObj();
+      groupTurn = 0;
+      isGameOver = false;
+      hasLeft = false;
+      leftToGuess = [0, 0];
+      currUser = users[0][0];
+    });
   }
 
   _chooseCard(WordObj word) {
@@ -47,14 +50,15 @@ class _GameState extends State<Game> {
 
   _incrementTurn() {
     if (!isGameOver) {
-      groupPoints.hideMap();
+      GroupPoint points = GroupPoint();
+      points.hideMap();
 
-      groupPoints.setPlayerTurn = (groupPoints.playerTurn + 1);
-      if (groupPoints.playerTurn == users[groupTurn].length) {
-        groupPoints.setPlayerTurn = 0;
+      points.setPlayerTurn = (points.playerTurn + 1);
+      if (points.playerTurn == users[groupTurn].length) {
+        points.setPlayerTurn = 0;
         groupTurn = (groupTurn + 1) % users.length;
       }
-      currUser = users[groupTurn][groupPoints.playerTurn];
+      currUser = users[groupTurn][points.playerTurn];
     }
   }
 
@@ -78,34 +82,34 @@ class _GameState extends State<Game> {
       hasLeft = true;
     }
 
-    groupPoints.setWordToFind(num);
+    GroupPoint().setWordToFind(num);
   }
 
   _handleChoice(WordObj word) {
     if (word.color != color[currUser.group]) {
-      groupPoints.updateWordToFind(groupPoints.wordToFind);
+      GroupPoint().updateWordToFind(GroupPoint().wordToFind);
     }
 
     if (word.color == color[0]) {
-      groupPoints.points[0]--;
+      GroupPoint().points[0]--;
     } else if (word.color == color[1]) {
-      groupPoints.points[1]--;
+      GroupPoint().points[1]--;
     }
 
     if (!isGameOver) {
-      if (groupPoints.points[0] == 0) {
+      if (GroupPoint().points[0] == 0) {
         endGameMsg(context, _newGame, "you win", color[0]);
-      } else if (groupPoints.points[1] == 0) {
+      } else if (GroupPoint().points[1] == 0) {
         endGameMsg(context, _newGame, "you win", color[1]);
       }
     }
 
-    if ((word.color != color[currUser.group] || groupPoints.wordToFind == 1)) {
+    if ((word.color != color[currUser.group] || GroupPoint().wordToFind == 1)) {
       _incrementTurn();
-      groupPoints.setClue("");
-      groupPoints.setWordToFind(0);
+      GroupPoint().setClue("");
+      GroupPoint().setWordToFind(0);
     } else {
-      groupPoints.setWordToFind(groupPoints.wordToFind - 1);
+      GroupPoint().setWordToFind(GroupPoint().wordToFind - 1);
     }
   }
 

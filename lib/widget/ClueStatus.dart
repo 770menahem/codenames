@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:provider/provider.dart';
 
 import '../Const.dart';
@@ -12,7 +13,7 @@ class ClueStatus extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Text(
-          "רמז: ${groupPoints.clue}",
+          "רמז: ${GroupPoint().clue}",
           textDirection: TextDirection.rtl,
           style: TextStyle(
             fontSize: 24,

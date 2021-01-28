@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/Const.dart';
+import 'package:newkodenames/Loading.dart';
+import 'package:newkodenames/obj/MyUser.dart';
+import 'package:newkodenames/obj/Room.dart';
+import 'package:provider/provider.dart';
 
 class NewRoom extends StatefulWidget {
   @override
@@ -8,10 +12,6 @@ class NewRoom extends StatefulWidget {
 }
 
 class _NewRoomState extends State<NewRoom> {
-  // final AuthService _auth = AuthService();
-  // final DatabadeService db = DatabadeService();
-
-  // String name = '';
   String error = '';
   bool loading = false;
 
@@ -19,81 +19,88 @@ class _NewRoomState extends State<NewRoom> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<MyUser>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "צור חדר",
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            SizedBox(
-              child: Text(
-                "הרשמה",
-                style: TextStyle(
-                  color: Colors.deepOrange,
-                  fontSize: 50.0,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 70.0,
-              child: TextFormField(
-                decoration: InputDecoration(labelText: 'שם'),
-                validator: (val) => val.isEmpty ? 'הכנס שם' : null,
-                onChanged: (val) {
-                  setState(() {
-                    roomName = val;
-                  });
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40.0,
-              child: RaisedButton(
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    setState(() {
-                      loading = true;
-                    });
-
-                    print(roomName);
-                    dynamic result = await gameRoom.setOnner();
-
-                    if (result == null) {
-                      setState(() {
-                        loading = false;
-                        error = 'היצירה נכשלה נסה שם אחר';
-                      });
-                    } else {
-                      print(result);
-                      Navigator.pushNamed(context, "/game");
-                    }
-                  }
-                },
-                color: Colors.pink,
-                child: SizedBox(
-                  width: 80.0,
-                  child: Center(
+      body: loading
+          ? Loading()
+          : Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  SizedBox(
                     child: Text(
-                      'צור',
+                      "הרשמה",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.deepOrange,
+                        fontSize: 50.0,
                       ),
                     ),
                   ),
-                ),
+                  SizedBox(
+                    height: 70.0,
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: 'שם'),
+                      validator: (val) => val.isEmpty ? 'הכנס שם' : null,
+                      onChanged: (val) {
+                        setState(() {
+                          roomName = val;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 40.0,
+                    child: RaisedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
+
+                          try {
+                            if (await Room().setOnner(user)) {
+                              Navigator.pushNamed(context, "/game");
+                            } else {
+                              setState(() {
+                                loading = false;
+                                error = 'היצירה נכשלה נסה שם אחר';
+                              });
+                            }
+                          } catch (e) {
+                            setState(() {
+                              loading = false;
+                              error = 'היצירה נכשלה נסה שם אחר';
+                            });
+                          }
+                        }
+                      },
+                      color: Colors.pink,
+                      child: SizedBox(
+                        width: 80.0,
+                        child: Center(
+                          child: Text(
+                            'צור',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 70.0,
+                    child: Text(error),
+                  ),
+                ],
               ),
             ),
-            SizedBox(
-              height: 70.0,
-              child: Text(error),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

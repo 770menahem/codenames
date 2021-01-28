@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 
 import '../Const.dart';
 
@@ -20,7 +21,7 @@ class InputClue extends StatelessWidget {
       color: Colors.amberAccent,
       child: Text("רמז"),
       onPressed: () {
-        clueForm(context, setNum, submit, groupPoints.points[currUser.group]);
+        clueForm(context, setNum, submit, GroupPoint().points[currUser.group]);
       },
     );
   }
@@ -93,7 +94,7 @@ clueForm(
             onPressed: () {
               if (key.currentState.validate()) {
                 setNum(int.parse(numController.text));
-                groupPoints.setClue(clueController.text);
+                GroupPoint().setClue(clueController.text);
 
                 submit();
                 Navigator.of(context).pop();

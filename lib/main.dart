@@ -11,6 +11,7 @@ import 'package:newkodenames/screen/rolesOption.dart';
 import 'package:provider/provider.dart';
 
 import 'Const.dart';
+import 'obj/GroupPoint.dart';
 import 'screen/signin.dart';
 import 'screen/AddWord.dart';
 import 'screen/Game.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<GroupPoint>(create: (_) => groupPoints),
+        ChangeNotifierProvider<GroupPoint>(create: (_) => GroupPoint()),
         StreamProvider<MyUser>.value(value: AuthService().user),
       ],
       child: MaterialApp(

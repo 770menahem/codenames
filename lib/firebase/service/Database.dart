@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/MyUser.dart';
 
 class DatabadeService {
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('codename');
 
-  Future createRoom(String name) async {
+  Future createRoom(String name, MyUser user) async {
     try {
-      final MyUser user = await AuthService().cuurUser;
-
       print(user);
-
+      final DocumentSnapshot res = await collection.doc(name).get();
+      if (res.exists) return false;
       DocumentReference snap = collection.doc(name);
 
       if (snap != null) {
@@ -41,21 +39,23 @@ class DatabadeService {
     }
   }
 
-  Future addCaptain(String room, String group) async {
-    final user = AuthService().user;
-    print("sada");
-    return await collection.doc(room).set({
-      group: {'captain': user},
+  Future addCaptain(String room, String group, MyUser user) async {
+    await collection.doc("123").update({
+      '$group.captain': {
+        "id": user.uid,
+        "name": user.name,
+      }
     });
   }
 
-  Future addGesser(String room, String group) async {
-    final user = AuthService().user;
-
-    return await collection.doc(room).update({
-      group: {
-        'gesser': FieldValue.arrayUnion([user])
-      }
+  Future addGesser(String room, String group, MyUser user) async {
+    await collection.doc("123").update({
+      '$group.gessers': FieldValue.arrayUnion([
+        {
+          "id": user.uid + "11",
+          "name": user.name,
+        }
+      ])
     });
   }
 
