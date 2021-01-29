@@ -14,7 +14,7 @@ class GameMenu extends StatelessWidget {
           FlatButton(
             color: Colors.indigo[50],
             onPressed: () {
-              Navigator.pushNamed(context, '/roles');
+              Navigator.pushNamed(context, '/joinroom');
             },
             child: Text("היכנס למשחק"),
           ),

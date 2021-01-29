@@ -61,8 +61,6 @@ class AuthService {
 
       user.updateProfile(displayName: name);
 
-      print("\n\n\n" + user.displayName + "\n\n\n");
-
       return _userFromFBUser(user);
     } catch (e) {
       print(e);

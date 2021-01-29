@@ -45,14 +45,11 @@ class RoleOption extends StatelessWidget {
           ));
     }
 
+    final Shader linearGradient = LinearGradient(
+      colors: <Color>[Colors.blue[800], Colors.red],
+    ).createShader(Rect.fromLTWH(0.0, 0.0, 350.0, 70.0));
+
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            "תפקיד",
-          ),
-        ),
-      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -71,14 +68,25 @@ class RoleOption extends StatelessWidget {
               Text(
                 "בחר תפקיד",
                 style: TextStyle(
-                  fontSize: 25.0,
+                  fontSize: 35.0,
                   fontWeight: FontWeight.bold,
+                  foreground: Paint()..shader = linearGradient,
                 ),
               ),
-              btn("קפטן כחול", 0, Colors.blue, room.setCaptainToBlue),
-              btn("קפטן אדום", 0, Colors.red, room.setCaptainToRed),
-              btn("מנחש כחול", 1, Colors.blue, room.addGesserToBlue),
-              btn("מנחש אדום", 1, Colors.red, room.addGesserToRed),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  btn("קפטן כחול", 0, Colors.blue, room.setCaptainToBlue),
+                  btn("קפטן אדום", 0, Colors.red, room.setCaptainToRed),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  btn("מנחש כחול", 1, Colors.blue, room.addGesserToBlue),
+                  btn("מנחש אדום", 1, Colors.red, room.addGesserToRed),
+                ],
+              ),
             ],
           ),
         ),

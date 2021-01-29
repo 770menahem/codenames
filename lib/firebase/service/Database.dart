@@ -5,6 +5,12 @@ class DatabadeService {
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('codename');
 
+  Future joinRoom(String roomName) async {
+    final DocumentSnapshot res = await collection.doc(roomName).get();
+    if (!res.exists) throw Error();
+    return res.data();
+  }
+
   Future createRoom(String name, MyUser user) async {
     try {
       print(user);
@@ -40,7 +46,7 @@ class DatabadeService {
   }
 
   Future addCaptain(String room, String group, MyUser user) async {
-    await collection.doc("123").update({
+    await collection.doc(room).update({
       '$group.captain': {
         "id": user.uid,
         "name": user.name,
@@ -49,10 +55,10 @@ class DatabadeService {
   }
 
   Future addGesser(String room, String group, MyUser user) async {
-    await collection.doc("123").update({
+    await collection.doc(room).update({
       '$group.gessers': FieldValue.arrayUnion([
         {
-          "id": user.uid + "11",
+          "id": user.uid,
           "name": user.name,
         }
       ])

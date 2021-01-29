@@ -65,7 +65,7 @@ class _NewRoomState extends State<NewRoom> {
 
                           try {
                             if (await Room().setOnner(user)) {
-                              Navigator.pushNamed(context, "/game");
+                              Navigator.pushNamed(context, "/roles");
                             } else {
                               setState(() {
                                 loading = false;

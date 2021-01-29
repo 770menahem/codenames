@@ -23,6 +23,16 @@ class Room {
 
   get room => this._room;
 
+  joinToRoom(String roomName) async {
+    dynamic data = await DatabadeService().joinRoom(roomName);
+    _room['onner'] = data.onner;
+    _room['blueGroup'] = data.blueGroup;
+    _room['redGroup'] = data.redGroup;
+    _room['name'] = roomName;
+    print(data);
+    print(_room);
+  }
+
   dynamic setOnner(MyUser user) async {
     try {
       dynamic res = await DatabadeService().createRoom(roomName, user);
