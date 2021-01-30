@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:newkodenames/firebase/service/Database.dart';
 
 import '../Const.dart';
 import 'MyUser.dart';
 
-class Room {
+class Room extends ChangeNotifier {
   static final Room _roomInctance = Room._inctance();
   factory Room() => _roomInctance;
   Room._inctance();
@@ -12,22 +13,24 @@ class Room {
     'onner': '',
     'name': '',
     'blueGroup': {
-      'captain': '',
-      'gessers': [],
+      'captain': null,
+      'gessers': null,
     },
     'redGroup': {
-      'captain': '',
-      'gessers': [],
+      'captain': null,
+      'gessers': null,
     },
   };
 
+  get hasBlueCaptain => this._room['blueGroup']['captain'].length > 1;
+  get hasRedCaptain => this._room['redGroup']['captain'].length > 1;
   get room => this._room;
 
   joinToRoom(String roomName) async {
     dynamic data = await DatabadeService().joinRoom(roomName);
-    _room['onner'] = data.onner;
-    _room['blueGroup'] = data.blueGroup;
-    _room['redGroup'] = data.redGroup;
+    _room['onner'] = data['onner'];
+    _room['blueGroup'] = data['blueGroup'];
+    _room['redGroup'] = data['redGroup'];
     _room['name'] = roomName;
     print(data);
     print(_room);

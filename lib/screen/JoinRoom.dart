@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/Loading.dart';
-import 'package:newkodenames/obj/MyUser.dart';
 import 'package:newkodenames/obj/Room.dart';
-import 'package:provider/provider.dart';
 
 class JoinRoom extends StatefulWidget {
   @override
@@ -19,12 +17,10 @@ class _JoinRoomState extends State<JoinRoom> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "צור חדר",
+          "הצטרף לחדר",
         ),
       ),
       body: loading
@@ -80,7 +76,7 @@ class _JoinRoomState extends State<JoinRoom> {
                         width: 80.0,
                         child: Center(
                           child: Text(
-                            'צור',
+                            'הצטרף',
                             style: TextStyle(
                               color: Colors.white,
                             ),

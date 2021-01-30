@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import 'Const.dart';
 import 'obj/GroupPoint.dart';
+import 'obj/Room.dart';
 import 'screen/signin.dart';
 import 'screen/AddWord.dart';
 import 'screen/Game.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<GroupPoint>(create: (_) => GroupPoint()),
+        ChangeNotifierProvider<Room>(create: (_) => Room()),
         StreamProvider<MyUser>.value(value: AuthService().user),
       ],
       child: MaterialApp(

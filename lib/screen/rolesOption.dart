@@ -12,6 +12,8 @@ class RoleOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
+    final bCap = Provider.of<Room>(context).hasBlueCaptain;
+    final rCap = Provider.of<Room>(context).hasRedCaptain;
 
     Container btn(String txt, int imgIndex, Color color, Function onTap) {
       return Container(
@@ -76,8 +78,10 @@ class RoleOption extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  btn("קפטן כחול", 0, Colors.blue, room.setCaptainToBlue),
-                  btn("קפטן אדום", 0, Colors.red, room.setCaptainToRed),
+                  if (!bCap)
+                    btn("קפטן כחול", 0, Colors.blue, room.setCaptainToBlue),
+                  if (!rCap)
+                    btn("קפטן אדום", 0, Colors.red, room.setCaptainToRed),
                 ],
               ),
               Row(
