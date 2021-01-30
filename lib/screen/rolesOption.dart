@@ -37,6 +37,7 @@ class RoleOption extends StatelessWidget {
             onPressed: () {
               try {
                 onTap(user);
+                Navigator.pushNamed(context, '/game');
               } catch (e) {
                 print(e);
               }

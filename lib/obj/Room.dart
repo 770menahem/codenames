@@ -13,12 +13,12 @@ class Room extends ChangeNotifier {
     'onner': '',
     'name': '',
     'blueGroup': {
-      'captain': null,
-      'gessers': null,
+      'captain': "",
+      'gessers': [],
     },
     'redGroup': {
-      'captain': null,
-      'gessers': null,
+      'captain': "",
+      'gessers': [],
     },
   };
 
