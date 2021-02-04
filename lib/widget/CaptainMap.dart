@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
+import 'package:newkodenames/obj/words.dart';
 
 class CaptainMap extends StatelessWidget {
-  final List words;
-
-  const CaptainMap({
-    Key key,
-    @required this.words,
-  }) : super(key: key);
+  final List<WordObj> words = GameInfo().words;
 
   @override
   Widget build(BuildContext context) {

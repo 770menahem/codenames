@@ -1,27 +1,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/obj/MyUser.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   MyUser _userFromFBUser(User user) {
-    return user != null ? MyUser(uid: user.uid, name: user.displayName) : null;
+    return user != null
+        ? MyUser(uid: user.uid, name: user.displayName ?? anonName(user))
+        : null;
   }
 
   Stream<MyUser> get user {
     return _auth.authStateChanges().map(_userFromFBUser);
   }
 
-  dynamic get cuurUser => _auth.currentUser;
+  dynamic get currUser => _auth.currentUser;
 
   String get name => _auth.currentUser.displayName;
+
+  String anonName(user) {
+    return 'אורח' + user.uid.substring(0, 2);
+  }
 
   Future singInAnon() async {
     try {
       UserCredential res = await _auth.signInAnonymously();
       User user = res.user;
-      await user.updateProfile(displayName: 'אורח' + user.uid.substring(0, 2));
-      return _userFromFBUser(user);
+      await user.updateProfile(displayName: anonName(user));
+      MyUser myUser = _userFromFBUser(user);
+      thisUser = myUser;
+      return myUser;
     } catch (e) {
       print(e.toString());
       return null;
@@ -34,7 +43,9 @@ class AuthService {
           email: email, password: password);
       User user = res.user;
 
-      return _userFromFBUser(user);
+      MyUser myUser = _userFromFBUser(user);
+      thisUser = myUser;
+      return myUser;
     } catch (e) {
       print(e);
       return null;
@@ -61,7 +72,9 @@ class AuthService {
 
       user.updateProfile(displayName: name);
 
-      return _userFromFBUser(user);
+      MyUser myUser = _userFromFBUser(user);
+      thisUser = myUser;
+      return myUser;
     } catch (e) {
       print(e);
       return null;

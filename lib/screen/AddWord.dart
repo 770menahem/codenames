@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/obj/words.dart';
 
+import '../Const.dart';
+
 class AddWord extends StatefulWidget {
   static List<String> wordToAdd = [];
 
@@ -90,35 +92,38 @@ class _AddWordState extends State<AddWord> {
       ),
     );
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            "הוסף מילים",
-            textDirection: TextDirection.rtl,
-          ),
-        ),
-        actions: actionBtn,
-      ),
-      backgroundColor: Colors.grey[300],
-      body: Column(
-        children: [
-          gridBoard,
-          SizedBox(
-            height: 10.0,
-          ),
-          Text(
-            "הכנס מילים כרצונך.\n" +
-                "הסדר לא משנה הם יתערבבו לפני המשחק,\n" +
-                "משבצות שישארו ריקות ימולאו במילים אחרות!",
-            style: TextStyle(
-              fontSize: 30.0,
+    return Container(
+      decoration: backgroundTheme,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Center(
+            child: Text(
+              "הוסף מילים",
+              textDirection: TextDirection.rtl,
             ),
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.rtl,
           ),
-        ],
+          actions: actionBtn,
+        ),
+        body: Column(
+          children: [
+            gridBoard,
+            SizedBox(
+              height: 10.0,
+            ),
+            Text(
+              "הכנס מילים כרצונך.\n" +
+                  "הסדר לא משנה הם יתערבבו לפני המשחק,\n" +
+                  "משבצות שישארו ריקות ימולאו במילים אחרות!",
+              style: TextStyle(
+                fontSize: 30.0,
+              ),
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+            ),
+          ],
+        ),
       ),
     );
   }

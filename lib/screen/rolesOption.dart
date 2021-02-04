@@ -1,69 +1,88 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newkodenames/obj/MyUser.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
+
 import 'package:newkodenames/obj/Room.dart';
-import 'package:provider/provider.dart';
 
 import '../Const.dart';
 
-class RoleOption extends StatelessWidget {
+class RoleOption extends StatefulWidget {
+  @override
+  _RoleOptionState createState() => _RoleOptionState();
+}
+
+class _RoleOptionState extends State<RoleOption> {
   final Room room = Room();
+
+  void clearRole() {
+    Roles role = GameInfo().role;
+    print("role = " + role.toString());
+
+    if (role != null) {
+      switch (role) {
+        case Roles.CAPTAIN_BLUE:
+          room.removeCaptain("blueGroup");
+          break;
+        case Roles.CAPTAIN_RED:
+          room.removeCaptain("redGroup");
+          break;
+        case Roles.GUESSER_BLUE:
+          room.removeGuesser("blueGroup");
+          break;
+        case Roles.GUESSER_RED:
+          room.removeGuesser("redGroup");
+          break;
+        default:
+      }
+
+      role = null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context);
-    final bCap = Provider.of<Room>(context).hasBlueCaptain;
-    final rCap = Provider.of<Room>(context).hasRedCaptain;
-
-    Container btn(String txt, int imgIndex, Color color, Function onTap) {
+    Container btn(String txt, int imgIndex, Color color, Function setRole) {
       return Container(
-          width: 150.0,
-          margin: EdgeInsets.all(10.0),
-          child: FlatButton(
-            height: 50.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CircleAvatar(
-                  backgroundImage: AssetImage(img[imgIndex]),
-                ),
-                SizedBox(
-                  width: 10.0,
-                ),
-                Text(txt),
-              ],
-            ),
-            color: color,
-            onPressed: () {
+        width: 150.0,
+        margin: EdgeInsets.all(10.0),
+        child: FlatButton(
+          height: 50.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              CircleAvatar(
+                backgroundImage: AssetImage(img[imgIndex]),
+              ),
+              Text(txt),
+            ],
+          ),
+          color: color,
+          onPressed: () async {
+            if (setRole != null) {
               try {
-                onTap(user);
-                Navigator.pushNamed(context, '/game');
+                await setRole();
+
+                Navigator.pushNamed(context, '/game')
+                    .then((value) => clearRole());
               } catch (e) {
                 print(e);
               }
-            },
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50.0),
-            ),
-          ));
+            }
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50.0),
+          ),
+        ),
+      );
     }
 
     final Shader linearGradient = LinearGradient(
-      colors: <Color>[Colors.blue[800], Colors.red],
+      colors: <Color>[Colors.red[800], Colors.blue[800]],
     ).createShader(Rect.fromLTWH(0.0, 0.0, 350.0, 70.0));
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.red,
-              Colors.blue,
-            ],
-          ),
-        ),
+        decoration: backgroundTheme,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -79,17 +98,19 @@ class RoleOption extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (!bCap)
-                    btn("קפטן כחול", 0, Colors.blue, room.setCaptainToBlue),
-                  if (!rCap)
-                    btn("קפטן אדום", 0, Colors.red, room.setCaptainToRed),
+                  room.blueCaptain.length == 0
+                      ? btn("קפטן", 0, Colors.blue, room.setCaptainToBlue)
+                      : btn("קפטן", 0, Colors.blue.withOpacity(0.2), null),
+                  room.redCaptain.length == 0
+                      ? btn("קפטן", 0, Colors.red, room.setCaptainToRed)
+                      : btn("קפטן", 0, Colors.red.withOpacity(0.2), null),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  btn("מנחש כחול", 1, Colors.blue, room.addGesserToBlue),
-                  btn("מנחש אדום", 1, Colors.red, room.addGesserToRed),
+                  btn("מנחש", 1, Colors.blue[600], room.addGuesserToBlue),
+                  btn("מנחש", 1, Colors.red[600], room.addGuesserToRed),
                 ],
               ),
             ],

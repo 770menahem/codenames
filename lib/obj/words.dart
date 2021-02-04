@@ -97,26 +97,29 @@ class Words {
 }
 
 class WordObj {
+  int id;
   String word;
   bool choose;
   Color color;
   static List<WordObj> gameWord = List();
+  static List<WordObj> userWord = List();
 
   WordObj({
+    this.id,
     this.word,
     this.color,
     this.choose = false,
   });
 
   clearList() {
-    gameWord = List<WordObj>();
+    gameWord.clear();
   }
 
   initList(List list) {
-    gameWord.clear();
+    userWord.clear();
 
     list.forEach((element) {
-      gameWord.add(WordObj(word: element));
+      userWord.add(WordObj(word: element));
     });
   }
 
@@ -129,7 +132,11 @@ class WordObj {
     ];
 
     List allWords = Words().getList();
+    clearList();
 
+    userWord.forEach((e) => e.choose = false);
+
+    gameWord.addAll(userWord);
     allWords.shuffle();
 
     int i = 0;
@@ -159,6 +166,10 @@ class WordObj {
     gameWord[i].color = colors[2];
 
     gameWord.shuffle();
+
+    gameWord.asMap().forEach((i, element) {
+      element.id = i;
+    });
 
     return gameWord;
   }

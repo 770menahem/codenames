@@ -7,27 +7,26 @@ import 'package:provider/provider.dart';
 import '../Const.dart';
 
 class MangerButton extends StatelessWidget {
-  final Function newGame;
   final Function incrementTurn;
   final Function setNum;
 
   const MangerButton({
     Key key,
-    @required this.newGame,
     @required this.incrementTurn,
     @required this.setNum,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final showmap = context.watch<GroupPoint>().show;
+    final showmap = context.watch<GameInfo>().show;
+    final role = context.watch<GameInfo>().role;
 
     return Column(
       children: [
         SizedBox(
           height: 5,
         ),
-        (currUser.role == captain)
+        (role.toString().contains("CAPTAIN") && currUser.role == captain)
             ? Column(
                 children: [
                   FlatButton(
@@ -35,7 +34,7 @@ class MangerButton extends StatelessWidget {
                     color: Colors.amberAccent,
                     child: showmap ? Text("הסתר מפה") : Text("הצג מפה"),
                     onPressed: () {
-                      GroupPoint().changeShowMap();
+                      GameInfo().changeShowMap();
                     },
                   ),
                   InputClue(
@@ -44,14 +43,16 @@ class MangerButton extends StatelessWidget {
                   ),
                 ],
               )
-            : FlatButton(
-                color: Colors.blueGrey,
-                onPressed: () {
-                  leftToGuess[currUser.group] += GroupPoint().wordToFind;
-                  this.incrementTurn();
-                },
-                child: Text('סיים תור'),
-              ),
+            : (!role.toString().contains("CAPTAIN") && currUser.role != captain)
+                ? FlatButton(
+                    color: Colors.blueGrey,
+                    onPressed: () {
+                      leftToGuess[currUser.group] += GameInfo().wordToFind;
+                      this.incrementTurn();
+                    },
+                    child: Text('סיים תור'),
+                  )
+                : Text(""),
       ],
     );
   }

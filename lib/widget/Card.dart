@@ -1,14 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/Loading.dart';
+import 'package:newkodenames/firebase/service/WordDb.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/words.dart';
+import 'package:provider/provider.dart';
+
+import '../Const.dart';
 
 class MyCard extends StatefulWidget {
-  final WordObj word;
+  final int wordIndex;
   final Function onChoose;
 
   const MyCard({
     Key key,
-    @required this.word,
+    @required this.wordIndex,
     @required this.onChoose,
   }) : super(key: key);
 
@@ -17,46 +23,56 @@ class MyCard extends StatefulWidget {
 }
 
 class _MyCardState extends State<MyCard> {
-  checkIfChoose() {
-    if (!widget.word.choose) {
-      print(widget.word.word);
-      this.widget.onChoose(widget.word);
+  bool loading = false;
 
+  checkIfChoose(WordObj word) async {
+    if (currUser.role != captain && !word.choose) {
+      setState(() => loading = true);
+
+      try {
+        await WordDB().choosing(word);
+      } catch (e) {}
+
+      this.widget.onChoose(this.widget.wordIndex);
       setState(() {
-        widget.word.choose = !widget.word.choose;
+        loading = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        checkIfChoose();
-      },
-      child: Center(
-        child: Container(
-          width: 100,
-          height: 50,
-          margin: EdgeInsets.symmetric(horizontal: 2),
-          padding: EdgeInsets.symmetric(horizontal: 6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: this.widget.word.choose
-                ? this.widget.word.color
-                : Colors.yellow[100],
-          ),
-          child: Center(
-            child: Text(
-              widget.word.word,
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+    WordObj wordObj = Provider.of<GameInfo>(context).words[widget.wordIndex];
+    String word = wordObj.word;
+    bool choose = wordObj.choose;
+    Color color = wordObj.color;
+
+    return loading || word == null
+        ? Loading()
+        : GestureDetector(
+            onTap: () async => await checkIfChoose(wordObj),
+            child: Center(
+              child: Container(
+                width: 100,
+                height: 50,
+                margin: EdgeInsets.symmetric(horizontal: 2),
+                padding: EdgeInsets.symmetric(horizontal: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: choose ? color : Colors.yellow[100],
+                ),
+                child: Center(
+                  child: Text(
+                    word,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

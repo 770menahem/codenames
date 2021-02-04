@@ -28,7 +28,7 @@ class Points extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final point = Provider.of<GroupPoint>(context).points;
+    final point = Provider.of<GameInfo>(context).points;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

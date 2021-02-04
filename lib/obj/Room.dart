@@ -1,34 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:newkodenames/firebase/service/Database.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 
 import '../Const.dart';
-import 'MyUser.dart';
 
 class Room extends ChangeNotifier {
-  static final Room _roomInctance = Room._inctance();
-  factory Room() => _roomInctance;
-  Room._inctance();
+  static final Room _roomInstance = Room._instance();
+
+  factory Room() => _roomInstance;
+
+  Room._instance();
 
   Map _room = {
-    'onner': '',
+    'owner': '',
     'name': '',
     'blueGroup': {
-      'captain': "",
-      'gessers': [],
+      'captain': {},
+      'guessers': [],
     },
     'redGroup': {
-      'captain': "",
-      'gessers': [],
+      'captain': {},
+      'guessers': [],
     },
   };
 
-  get hasBlueCaptain => this._room['blueGroup']['captain'].length > 1;
-  get hasRedCaptain => this._room['redGroup']['captain'].length > 1;
+  get blueCaptain => this._room['blueGroup']['captain'];
+
+  get redCaptain => this._room['redGroup']['captain'];
+
   get room => this._room;
 
   joinToRoom(String roomName) async {
-    dynamic data = await DatabadeService().joinRoom(roomName);
-    _room['onner'] = data['onner'];
+    dynamic data = await PlayerDB().joinRoom(roomName);
+    _room['owner'] = data['owner'];
     _room['blueGroup'] = data['blueGroup'];
     _room['redGroup'] = data['redGroup'];
     _room['name'] = roomName;
@@ -36,53 +40,93 @@ class Room extends ChangeNotifier {
     print(_room);
   }
 
-  dynamic setOnner(MyUser user) async {
-    try {
-      dynamic res = await DatabadeService().createRoom(roomName, user);
+  void removeCaptain(String group) {
+    this._room[group]['captain'] = {};
+    PlayerDB().delCaptain(_room['name'], group);
+  }
 
-      this._room['onner'] = {
-        'id': user.uid,
-        "name": user.name,
+  void removeGuesser(String group) {
+    _room[group]['guessers']
+        .removeWhere((guesser) => thisUser.uid == guesser['id']);
+
+    PlayerDB().delGuesser(_room['name'], group, _room[group]['guessers']);
+  }
+
+  dynamic setOwner() async {
+    try {
+      thisUser.makeOnner();
+      dynamic res = await PlayerDB().createRoom(roomName);
+
+      GameInfo().setRole = null;
+
+      this._room = {
+        'owner': {
+          'id': thisUser.uid,
+          "name": thisUser.name,
+        },
+        'name': roomName,
+        'blueGroup': {
+          'captain': {},
+          'guessers': [],
+        },
+        'redGroup': {
+          'captain': {},
+          'guessers': [],
+        },
       };
+
       return res;
     } catch (e) {
       print(e);
     }
   }
 
-  dynamic setCaptainToBlue(MyUser user) async {
-    await DatabadeService().addCaptain(roomName, 'blueGroup', user);
+  dynamic setCaptainToBlue() async {
+    await PlayerDB().addCaptain(roomName, 'blueGroup');
 
-    this._room['blueGroup']['captain'] = {
-      'id': user.uid,
-      "name": user.name,
+    this._room['blueGroup'] = {
+      'captain': {
+        'id': thisUser.uid,
+        "name": thisUser.name,
+      },
+      'guessers': [...this._room['blueGroup']['guessers']],
     };
+
+    GameInfo().setRole = Roles.CAPTAIN_BLUE;
   }
 
-  dynamic setCaptainToRed(MyUser user) async {
-    await DatabadeService().addCaptain(roomName, 'redGroup', user);
+  dynamic setCaptainToRed() async {
+    await PlayerDB().addCaptain(roomName, 'redGroup');
 
-    this._room['onner'] = {
-      'id': user.uid,
-      "name": user.name,
+    this._room['redGroup'] = {
+      'captain': {
+        'id': thisUser.uid,
+        "name": thisUser.name,
+      },
+      'guessers': [...this._room['redGroup']['guessers']],
     };
+    GameInfo().setRole = Roles.CAPTAIN_RED;
   }
 
-  dynamic addGesserToBlue(user) async {
-    await DatabadeService().addGesser(roomName, "blueGroup", user);
+  dynamic addGuesserToBlue() async {
+    await PlayerDB().addGuesser(roomName, "blueGroup");
 
-    this._room['blueGroup']['gessers'].add({
-      'id': user.uid,
-      "name": user.name,
+    this._room['blueGroup']['guessers'].add({
+      'id': thisUser.uid,
+      "name": thisUser.name,
     });
+
+    GameInfo().setRole = Roles.GUESSER_BLUE;
   }
 
-  dynamic addGesserToRed(user) async {
-    await DatabadeService().addGesser(roomName, "redGroup", user);
+  dynamic addGuesserToRed() async {
+    await PlayerDB().addGuesser(roomName, "redGroup");
 
-    this._room['redGroup']['gessers'].add({
-      'id': user.uid,
-      "name": user.name,
+    this._room['redGroup']['guessers'].add({
+      'id': thisUser.uid,
+      "name": thisUser.name,
     });
+
+    GameInfo().setRole = Roles.GUESSER_RED;
   }
 }

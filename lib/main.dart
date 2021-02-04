@@ -10,7 +10,6 @@ import 'package:newkodenames/screen/register.dart';
 import 'package:newkodenames/screen/rolesOption.dart';
 import 'package:provider/provider.dart';
 
-import 'Const.dart';
 import 'obj/GroupPoint.dart';
 import 'obj/Room.dart';
 import 'screen/signin.dart';
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<GroupPoint>(create: (_) => GroupPoint()),
+        ChangeNotifierProvider<GameInfo>(create: (_) => GameInfo()),
         ChangeNotifierProvider<Room>(create: (_) => Room()),
         StreamProvider<MyUser>.value(value: AuthService().user),
       ],

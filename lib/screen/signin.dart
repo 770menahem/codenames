@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/Loading.dart';
 import 'package:newkodenames/widget/Guest.dart';
@@ -75,7 +76,7 @@ class _SignInState extends State<SignIn> {
 
                         dynamic res = await _auth.signInWithEmailAndPassword(
                             email, password);
-
+                        thisUser = res;
                         if (res == null) {
                           errorMsg('ההתחברות נכשלה נסה שוב');
                           loadingStatus(false);

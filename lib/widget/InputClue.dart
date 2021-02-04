@@ -21,7 +21,7 @@ class InputClue extends StatelessWidget {
       color: Colors.amberAccent,
       child: Text("רמז"),
       onPressed: () {
-        clueForm(context, setNum, submit, GroupPoint().points[currUser.group]);
+        clueForm(context, setNum, submit, GameInfo().points[currUser.group]);
       },
     );
   }
@@ -67,6 +67,7 @@ clueForm(
               ),
               TextFormField(
                 controller: numController,
+                textDirection: TextDirection.rtl,
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   return (value.isNotEmpty && isNumeric(value))
@@ -94,7 +95,7 @@ clueForm(
             onPressed: () {
               if (key.currentState.validate()) {
                 setNum(int.parse(numController.text));
-                GroupPoint().setClue(clueController.text);
+                GameInfo().setClue(clueController.text);
 
                 submit();
                 Navigator.of(context).pop();
