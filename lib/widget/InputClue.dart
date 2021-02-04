@@ -21,7 +21,8 @@ class InputClue extends StatelessWidget {
       color: Colors.amberAccent,
       child: Text("רמז"),
       onPressed: () {
-        clueForm(context, setNum, submit, GameInfo().points[currUser.group]);
+        clueForm(context, setNum, submit,
+            GameInfo().points[GameInfo().currUser.group]);
       },
     );
   }

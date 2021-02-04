@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/Loading.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/Room.dart';
 
 class JoinRoom extends StatefulWidget {
@@ -21,79 +22,85 @@ class _JoinRoomState extends State<JoinRoom> {
       decoration: backgroundTheme,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(
-            "הצטרף לחדר",
-          ),
-        ),
         body: loading
             ? Loading()
-            : Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      child: Text(
-                        "הכנס שם חדר",
-                        style: TextStyle(
-                          color: Colors.deepOrange,
-                          fontSize: 50.0,
+            : SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 250.0,
+                      ),
+                      SizedBox(
+                        child: Text(
+                          "הכנס שם חדר",
+                          style: TextStyle(
+                            color: Colors.deepOrange,
+                            fontSize: 50.0,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 70.0,
-                      child: TextFormField(
-                        decoration: InputDecoration(labelText: 'שם'),
-                        validator: (val) => val.isEmpty ? 'הכנס שם' : null,
-                        onChanged: (val) {
-                          setState(() {
-                            roomName = val;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40.0,
-                      child: RaisedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-                            setState(() {
-                              loading = true;
-                            });
-
-                            try {
-                              await Room().joinToRoom(roomName);
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, "/roles");
-                            } catch (e) {
-                              print(e);
-                              setState(() {
-                                loading = false;
-                                error = 'חדר לא קיים';
-                              });
-                            }
-                          }
-                        },
-                        color: Colors.pink,
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20.0),
                         child: SizedBox(
-                          width: 80.0,
-                          child: Center(
-                            child: Text(
-                              'הצטרף',
-                              style: TextStyle(
-                                color: Colors.white,
+                          height: 70.0,
+                          child: TextFormField(
+                            textDirection: TextDirection.rtl,
+                            decoration: InputDecoration(
+                              labelText: 'שם',
+                            ),
+                            validator: (val) => val.isEmpty ? 'הכנס שם' : null,
+                            onChanged: (val) {
+                              setState(() {
+                                GameInfo().roomName = val;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 40.0,
+                        child: RaisedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              setState(() {
+                                loading = true;
+                              });
+
+                              try {
+                                await Room().joinToRoom(GameInfo().roomName);
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, "/roles");
+                              } catch (e) {
+                                print(e);
+                                setState(() {
+                                  loading = false;
+                                  error = 'חדר לא קיים';
+                                });
+                              }
+                            }
+                          },
+                          color: Colors.pink,
+                          child: SizedBox(
+                            width: 80.0,
+                            child: Center(
+                              child: Text(
+                                'הצטרף',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 70.0,
-                      child: Text(error),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 70.0,
+                        child: Text(error),
+                      ),
+                    ],
+                  ),
                 ),
               ),
       ),

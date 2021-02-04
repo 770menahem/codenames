@@ -26,7 +26,8 @@ class MangerButton extends StatelessWidget {
         SizedBox(
           height: 5,
         ),
-        (role.toString().contains("CAPTAIN") && currUser.role == captain)
+        (role.toString().contains("CAPTAIN") &&
+                GameInfo().currUser.role == captain)
             ? Column(
                 children: [
                   FlatButton(
@@ -43,11 +44,13 @@ class MangerButton extends StatelessWidget {
                   ),
                 ],
               )
-            : (!role.toString().contains("CAPTAIN") && currUser.role != captain)
+            : (!role.toString().contains("CAPTAIN") &&
+                    GameInfo().currUser.role != captain)
                 ? FlatButton(
                     color: Colors.blueGrey,
                     onPressed: () {
-                      leftToGuess[currUser.group] += GameInfo().wordToFind;
+                      GameInfo().leftToGuess[GameInfo().currUser.group] +=
+                          GameInfo().wordToFind;
                       this.incrementTurn();
                     },
                     child: Text('סיים תור'),

@@ -18,18 +18,18 @@ class ClueStatus extends StatelessWidget {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: color[groupTurn],
+            color: color[GameInfo().groupTurn],
           ),
         ),
         Text(
-          (hasLeft && numToFind > 1)
+          (GameInfo().hasLeft && numToFind > 1)
               ? "מספר: ${numToFind - 1} + 1"
               : "מספר: $numToFind",
           textDirection: TextDirection.rtl,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: color[groupTurn],
+            color: color[GameInfo().groupTurn],
           ),
         ),
       ],

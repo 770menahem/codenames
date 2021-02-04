@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:newkodenames/Const.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/MyUser.dart';
 
 class AuthService {
@@ -29,7 +30,7 @@ class AuthService {
       User user = res.user;
       await user.updateProfile(displayName: anonName(user));
       MyUser myUser = _userFromFBUser(user);
-      thisUser = myUser;
+      GameInfo().thisUser = myUser;
       return myUser;
     } catch (e) {
       print(e.toString());
@@ -44,7 +45,7 @@ class AuthService {
       User user = res.user;
 
       MyUser myUser = _userFromFBUser(user);
-      thisUser = myUser;
+      GameInfo().thisUser = myUser;
       return myUser;
     } catch (e) {
       print(e);
@@ -73,7 +74,7 @@ class AuthService {
       user.updateProfile(displayName: name);
 
       MyUser myUser = _userFromFBUser(user);
-      thisUser = myUser;
+      GameInfo().thisUser = myUser;
       return myUser;
     } catch (e) {
       print(e);

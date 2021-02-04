@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:newkodenames/firebase/service/WordDb.dart';
-
-import '../../Const.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
+import 'package:newkodenames/obj/MyUser.dart';
 
 class PlayerDB {
   final CollectionReference collectionGame = FirebaseFirestore.instance
       .collection('codename')
-      .doc(roomName)
+      .doc(GameInfo().roomName)
       .collection('game');
 
   Future joinRoom(String roomName) async {
@@ -25,8 +25,8 @@ class PlayerDB {
         WordDB().createWords(name);
         await collectionGame.doc(name).set({
           'owner': {
-            "id": thisUser.uid,
-            "name": thisUser.name,
+            "id": GameInfo().thisUser.uid,
+            "name": GameInfo().thisUser.name,
           },
           'blueGroup': {
             'captain': {},
@@ -66,24 +66,27 @@ class PlayerDB {
   }
 
   Future addCaptain(String room, String group) async {
+    MyUser user = GameInfo().thisUser;
     await collectionGame.doc(room).update({
       '$group.captain': {
-        "id": thisUser.uid,
-        "name": thisUser.name,
+        "id": user.uid,
+        "name": user.name,
       }
     });
   }
 
   Future addGuesser(String room, String group) async {
+    MyUser user = GameInfo().thisUser;
     await collectionGame.doc(room).update({
       '$group.guessers': FieldValue.arrayUnion([
         {
-          "id": thisUser.uid,
-          "name": thisUser.name,
+          "id": user.uid,
+          "name": user.name,
         }
       ])
     });
   }
 
-  Stream<DocumentSnapshot> get room => collectionGame.doc(roomName).snapshots();
+  Stream<DocumentSnapshot> get room =>
+      collectionGame.doc(GameInfo().roomName).snapshots();
 }

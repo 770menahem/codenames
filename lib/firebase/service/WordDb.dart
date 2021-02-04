@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/words.dart';
-
-import '../../Const.dart';
 
 class WordDB {
   final CollectionReference collectionWords = FirebaseFirestore.instance
       .collection('codename')
-      .doc(roomName)
+      .doc(GameInfo().roomName)
       .collection('words');
 
   createWords(name) async {

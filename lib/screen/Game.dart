@@ -36,53 +36,49 @@ class _GameState extends State<Game> {
 
     setState(() {
       GameInfo().reset();
-      groupTurn = 0;
-      isGameOver = false;
-      hasLeft = false;
-      leftToGuess = [0, 0];
-      currUser = users[0][0];
     });
   }
 
   _chooseCard(int wordIndex) {
-    if (currUser.role != captain) {
+    if (GameInfo().currUser.role != captain) {
       _checkGameOver(wordIndex);
       _handleChoice(wordIndex);
     }
   }
 
   _incrementTurn() {
-    if (!isGameOver) {
+    if (!GameInfo().isGameOver) {
+      int groupTurn = GameInfo().groupTurn;
       GameInfo points = GameInfo();
       points.hideMap();
 
       points.setPlayerTurn = (points.playerTurn + 1);
       if (points.playerTurn == users[groupTurn].length) {
         points.setPlayerTurn = 0;
-        groupTurn = (groupTurn + 1) % users.length;
+        GameInfo().groupTurn = (groupTurn + 1) % users.length;
       }
-      currUser = users[groupTurn][points.playerTurn];
+      GameInfo().currUser = users[groupTurn][points.playerTurn];
     }
   }
 
   _checkGameOver(int wordIndex) {
     if (GameInfo().words[wordIndex].color == color[2]) {
-      isGameOver = true;
+      GameInfo().isGameOver = true;
 
       endGameMsg(
           context,
           _newGame,
-          "המשחק נגמר קבוצה: ${currUser.group + 1} הפסידה",
-          color[currUser.group]);
+          "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
+          color[GameInfo().currUser.group]);
     }
   }
 
   _numToFind(int num) {
-    hasLeft = false;
+    GameInfo().hasLeft = false;
 
-    if (leftToGuess[currUser.group] > 0) {
+    if (GameInfo().leftToGuess[GameInfo().currUser.group] > 0) {
       num++;
-      hasLeft = true;
+      GameInfo().hasLeft = true;
     }
 
     GameInfo().setWordToFind(num);
@@ -92,7 +88,7 @@ class _GameState extends State<Game> {
     WordObj word = GameInfo().words[wordIndex];
     List points = GameInfo().points;
 
-    if (word.color != color[currUser.group]) {
+    if (word.color != color[GameInfo().currUser.group]) {
       GameInfo().updateWordToFind(GameInfo().wordToFind);
     }
 
@@ -102,7 +98,7 @@ class _GameState extends State<Game> {
       points[1]--;
     }
 
-    if (!isGameOver) {
+    if (!GameInfo().isGameOver) {
       if (points[0] == 0) {
         endGameMsg(context, _newGame, "you win", color[0]);
       } else if (points[1] == 0) {
@@ -110,7 +106,8 @@ class _GameState extends State<Game> {
       }
     }
 
-    if ((word.color != color[currUser.group] || GameInfo().wordToFind == 1)) {
+    if ((word.color != color[GameInfo().currUser.group] ||
+        GameInfo().wordToFind == 1)) {
       _incrementTurn();
       GameInfo().setClue("");
       GameInfo().setWordToFind(0);
@@ -131,7 +128,7 @@ class _GameState extends State<Game> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            roomName,
+            GameInfo().roomName,
           ),
           actions: [
             FlatButton(
@@ -148,8 +145,9 @@ class _GameState extends State<Game> {
             children: [
               User(),
               SizedBox(
-                height: 32,
-                child: currUser.role != captain && !isGameOver
+                height: 50,
+                child: GameInfo().currUser.role != captain &&
+                        !GameInfo().isGameOver
                     ? ClueStatus()
                     : null,
               ),

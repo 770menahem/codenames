@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/Loading.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 
 import '../Const.dart';
 import '../firebase/service/authService.dart';
@@ -28,7 +29,7 @@ class _RegisterState extends State<Register> {
 
       dynamic res =
           await _auth.registerWithEmailAndPassword(name, email, password);
-      thisUser = res;
+      GameInfo().thisUser = res;
 
       if (res == null) {
         setState(() {

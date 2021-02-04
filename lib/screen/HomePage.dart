@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/MyUser.dart';
 import 'package:newkodenames/screen/GameMenu.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ class HomePage extends StatelessWidget {
     final user = Provider.of<MyUser>(context);
 
     if (user != null) {
-      thisUser = user;
+      GameInfo().thisUser = user;
     }
 
     return Container(

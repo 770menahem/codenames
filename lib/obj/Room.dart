@@ -47,24 +47,24 @@ class Room extends ChangeNotifier {
 
   void removeGuesser(String group) {
     _room[group]['guessers']
-        .removeWhere((guesser) => thisUser.uid == guesser['id']);
+        .removeWhere((guesser) => GameInfo().thisUser.uid == guesser['id']);
 
     PlayerDB().delGuesser(_room['name'], group, _room[group]['guessers']);
   }
 
   dynamic setOwner() async {
     try {
-      thisUser.makeOnner();
-      dynamic res = await PlayerDB().createRoom(roomName);
+      GameInfo().thisUser.makeOnner();
+      dynamic res = await PlayerDB().createRoom(GameInfo().roomName);
 
       GameInfo().setRole = null;
 
       this._room = {
         'owner': {
-          'id': thisUser.uid,
-          "name": thisUser.name,
+          'id': GameInfo().thisUser.uid,
+          "name": GameInfo().thisUser.name,
         },
-        'name': roomName,
+        'name': GameInfo().roomName,
         'blueGroup': {
           'captain': {},
           'guessers': [],
@@ -82,12 +82,12 @@ class Room extends ChangeNotifier {
   }
 
   dynamic setCaptainToBlue() async {
-    await PlayerDB().addCaptain(roomName, 'blueGroup');
+    await PlayerDB().addCaptain(GameInfo().roomName, 'blueGroup');
 
     this._room['blueGroup'] = {
       'captain': {
-        'id': thisUser.uid,
-        "name": thisUser.name,
+        'id': GameInfo().thisUser.uid,
+        "name": GameInfo().thisUser.name,
       },
       'guessers': [...this._room['blueGroup']['guessers']],
     };
@@ -96,12 +96,12 @@ class Room extends ChangeNotifier {
   }
 
   dynamic setCaptainToRed() async {
-    await PlayerDB().addCaptain(roomName, 'redGroup');
+    await PlayerDB().addCaptain(GameInfo().roomName, 'redGroup');
 
     this._room['redGroup'] = {
       'captain': {
-        'id': thisUser.uid,
-        "name": thisUser.name,
+        'id': GameInfo().thisUser.uid,
+        "name": GameInfo().thisUser.name,
       },
       'guessers': [...this._room['redGroup']['guessers']],
     };
@@ -109,22 +109,22 @@ class Room extends ChangeNotifier {
   }
 
   dynamic addGuesserToBlue() async {
-    await PlayerDB().addGuesser(roomName, "blueGroup");
+    await PlayerDB().addGuesser(GameInfo().roomName, "blueGroup");
 
     this._room['blueGroup']['guessers'].add({
-      'id': thisUser.uid,
-      "name": thisUser.name,
+      'id': GameInfo().thisUser.uid,
+      "name": GameInfo().thisUser.name,
     });
 
     GameInfo().setRole = Roles.GUESSER_BLUE;
   }
 
   dynamic addGuesserToRed() async {
-    await PlayerDB().addGuesser(roomName, "redGroup");
+    await PlayerDB().addGuesser(GameInfo().roomName, "redGroup");
 
     this._room['redGroup']['guessers'].add({
-      'id': thisUser.uid,
-      "name": thisUser.name,
+      'id': GameInfo().thisUser.uid,
+      "name": GameInfo().thisUser.name,
     });
 
     GameInfo().setRole = Roles.GUESSER_RED;

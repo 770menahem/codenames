@@ -18,7 +18,7 @@ class User extends StatelessWidget {
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: color[groupTurn],
+            color: color[GameInfo().groupTurn],
           ),
           padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
           child: Row(
@@ -46,7 +46,7 @@ class User extends StatelessWidget {
                 width: 10,
               ),
               Text(
-                "${currUser.group + 1} :קבוצה",
+                "${GameInfo().currUser.group + 1} :קבוצה",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ],

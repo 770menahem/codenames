@@ -5,14 +5,14 @@ import 'obj/words.dart';
 
 List color = [Colors.blue[400], Colors.red[400], Colors.black];
 List<String> img = ["img/capten.jpg", "img/player.jpg"];
-bool isGameOver;
-int groupTurn;
-bool hasLeft;
-List leftToGuess;
-UserObj currUser;
-String roomName;
+// bool isGameOver;
+// int groupTurn;
+// bool hasLeft;
+// List leftToGuess;
+// UserObj currUser;
+// String roomName;
+// MyUser thisUser;
 const String captain = "captain";
-MyUser thisUser;
 
 enum Roles {
   CAPTAIN_BLUE,

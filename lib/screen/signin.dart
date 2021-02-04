@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/Loading.dart';
+import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/Guest.dart';
 
 class SignIn extends StatefulWidget {
@@ -76,7 +77,7 @@ class _SignInState extends State<SignIn> {
 
                         dynamic res = await _auth.signInWithEmailAndPassword(
                             email, password);
-                        thisUser = res;
+                        GameInfo().thisUser = res;
                         if (res == null) {
                           errorMsg('ההתחברות נכשלה נסה שוב');
                           loadingStatus(false);
