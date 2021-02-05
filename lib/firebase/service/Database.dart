@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/MyUser.dart';
@@ -22,7 +23,8 @@ class PlayerDB {
       DocumentReference snap = collectionGame.doc(name);
 
       if (snap != null) {
-        WordDB().createWords(name);
+        WordDB().createWords();
+        GameFLowDB().createGameInfo();
         await collectionGame.doc(name).set({
           'owner': {
             "id": GameInfo().thisUser.uid,

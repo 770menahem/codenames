@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/obj/words.dart';
 
@@ -53,6 +54,7 @@ class GameInfo with ChangeNotifier {
     this._hasLeft = false;
     this._currUser = users[0][0];
     this._words = convertToWordObj(await WordDB().gatWords());
+    GameFLowDB().createGameInfo();
   }
 
   void changeShowMap() {

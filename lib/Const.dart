@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:newkodenames/obj/MyUser.dart';
-import 'obj/UserObj.dart';
 import 'obj/words.dart';
 
 List color = [Colors.blue[400], Colors.red[400], Colors.black];
 List<String> img = ["img/capten.jpg", "img/player.jpg"];
-// bool isGameOver;
-// int groupTurn;
-// bool hasLeft;
-// List leftToGuess;
-// UserObj currUser;
-// String roomName;
-// MyUser thisUser;
 const String captain = "captain";
 
 enum Roles {

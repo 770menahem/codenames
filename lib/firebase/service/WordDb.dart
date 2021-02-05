@@ -8,7 +8,7 @@ class WordDB {
       .doc(GameInfo().roomName)
       .collection('words');
 
-  createWords(name) async {
+  createWords() async {
     DocumentReference words = collectionWords.doc('words');
     if (words != null) {
       await words.set({

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/firebase/service/Database.dart';
+import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
@@ -37,6 +38,8 @@ class _GameState extends State<Game> {
     setState(() {
       GameInfo().reset();
     });
+
+    print(await GameFLowDB().getPoint());
   }
 
   _chooseCard(int wordIndex) {
