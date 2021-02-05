@@ -2,45 +2,88 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 
 class GameFLowDB {
-  final DocumentReference collectionGame = FirebaseFirestore.instance
+  final CollectionReference collGameFlow = FirebaseFirestore.instance
       .collection('codename')
       .doc(GameInfo().roomName)
-      .collection('gameflow')
-      .doc("info");
+      .collection('gameflow');
 
   createGameInfo() async {
-    await collectionGame.set({
-      'points': GameInfo().points,
-      'wordToFind': GameInfo().wordToFind,
-      'clue': GameInfo().clue,
-      'playerTurn': GameInfo().playerTurn,
-      'isGameOver': GameInfo().isGameOver,
-      'groupTurn': GameInfo().groupTurn,
-      'hasLeft': GameInfo().hasLeft,
-      'leftToGuess': GameInfo().leftToGuess,
+    await collGameFlow.doc("info").set({
+      'points': [8, 9],
+      'wordToFind': 0,
+      'clue': "",
+      'playerTurn': 0,
+      'isGameOver': false,
+      'groupTurn': 0,
+      'hasLeft': false,
+      'leftToGuess': [0, 0],
     });
   }
 
-  changePoints() => collectionGame.set({'points': GameInfo().points});
+  changePoints() async =>
+      await collGameFlow.doc("info").update({'points': GameInfo().points});
 
-  changeWordToFind() =>
-      collectionGame.set({'wordToFind': GameInfo().wordToFind});
+  changeWordToFind() async => await collGameFlow
+      .doc("info")
+      .update({'wordToFind': GameInfo().wordToFind});
 
-  changeClue() => collectionGame.set({'clue': GameInfo().clue});
+  changeClue() async =>
+      await collGameFlow.doc("info").update({'clue': GameInfo().clue});
 
-  changePlayerTurn() =>
-      collectionGame.set({'playerTurn': GameInfo().playerTurn});
+  changePlayerTurn() async => await collGameFlow
+      .doc("info")
+      .update({'playerTurn': GameInfo().playerTurn});
 
-  changeIsGameOver() =>
-      collectionGame.set({'isGameOver': GameInfo().isGameOver});
+  changeIsGameOver() async => await collGameFlow
+      .doc("info")
+      .update({'isGameOver': GameInfo().isGameOver});
 
-  changeGroupTurn() => collectionGame.set({'groupTurn': GameInfo().groupTurn});
-  changeHasLeft() => collectionGame.set({'hasLeft': GameInfo().hasLeft});
-  changeLeftToGuess() =>
-      collectionGame.set({'leftToGuess': GameInfo().leftToGuess});
+  changeGroupTurn() async => await collGameFlow
+      .doc("info")
+      .update({'groupTurn': GameInfo().groupTurn});
+  changeHasLeft() async =>
+      await collGameFlow.doc("info").update({'hasLeft': GameInfo().hasLeft});
+  changeLeftToGuess() async => await collGameFlow
+      .doc("info")
+      .update({'leftToGuess': GameInfo().leftToGuess});
 
-  getPoint() async {
-    DocumentSnapshot res = await collectionGame.get();
-    return res['points'];
+  Future<List> points() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['points'];
+  }
+
+  Future<int> wordToFind() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['wordToFind'];
+  }
+
+  Future<String> clue() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['clue'];
+  }
+
+  Future<int> playerTurn() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['playerTurn'];
+  }
+
+  Future<bool> isGameOver() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['isGameOver'];
+  }
+
+  Future<int> groupTurn() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['groupTurn'];
+  }
+
+  Future<bool> hasLeft() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['hasLeft'];
+  }
+
+  Future<List> leftToGuess() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['leftToGuess'];
   }
 }

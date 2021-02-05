@@ -101,7 +101,7 @@ class WordObj {
   String word;
   bool choose;
   Color color;
-  static List<WordObj> gameWord = List();
+  static List<WordObj> gameWords = List();
   static List<WordObj> userWord = List();
 
   WordObj({
@@ -112,7 +112,7 @@ class WordObj {
   });
 
   clearList() {
-    gameWord.clear();
+    gameWords.clear();
   }
 
   initList(List list) {
@@ -123,7 +123,7 @@ class WordObj {
     });
   }
 
-  List getWordObj() {
+  List getWords() {
     List<Color> colors = [
       Colors.blue[400],
       Colors.red[400],
@@ -136,14 +136,14 @@ class WordObj {
 
     userWord.forEach((e) => e.choose = false);
 
-    gameWord.addAll(userWord);
+    gameWords.addAll(userWord);
     allWords.shuffle();
 
     int i = 0;
 
-    while (gameWord.length < 25) {
-      if (gameWord.length == 0 || !gameWord.contains(allWords[i])) {
-        gameWord.add(WordObj(
+    while (gameWords.length < 25) {
+      if (gameWords.length == 0 || !gameWords.contains(allWords[i])) {
+        gameWords.add(WordObj(
           word: allWords[i],
         ));
       }
@@ -151,27 +151,27 @@ class WordObj {
       i = i + 1 % allWords.length;
     }
 
-    for (i = 0; i < gameWord.length; i++) {
-      gameWord[i].color = colors[3];
+    for (i = 0; i < gameWords.length; i++) {
+      gameWords[i].color = colors[3];
     }
 
     for (i = 0; i < 9; i++) {
-      gameWord[i].color = colors[0];
+      gameWords[i].color = colors[0];
     }
 
     for (i = i; i < 17; i++) {
-      gameWord[i].color = colors[1];
+      gameWords[i].color = colors[1];
     }
 
-    gameWord[i].color = colors[2];
+    gameWords[i].color = colors[2];
 
-    gameWord.shuffle();
+    gameWords.shuffle();
 
-    gameWord.asMap().forEach((i, element) {
+    gameWords.asMap().forEach((i, element) {
       element.id = i;
     });
 
-    return gameWord;
+    return gameWords;
   }
 
   @override

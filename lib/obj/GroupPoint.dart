@@ -27,20 +27,20 @@ class GameInfo with ChangeNotifier {
   String _roomName;
   MyUser _thisUser;
 
-  get isGameOver => this._isGameOver;
-  get groupTurn => this._groupTurn;
-  get hasLeft => this._hasLeft;
-  get leftToGuess => this._leftToGuess;
+  get isGameOver async => await GameFLowDB().isGameOver();
+  get groupTurn async => await GameFLowDB().groupTurn();
+  get hasLeft async => await GameFLowDB().hasLeft();
+  get leftToGuess async => await GameFLowDB().leftToGuess();
   get currUser => this._currUser;
   get roomName => this._roomName;
   get thisUser => this._thisUser;
   get words => this._words;
-  get playerTurn => this._playerTurn;
+  get playerTurn async => await GameFLowDB().playerTurn();
   get show => this._showMap;
   get role => this._role;
-  get clue => this._clue;
-  get points => this._points;
-  get wordToFind => this._wordToFind;
+  get clue async => await GameFLowDB().clue();
+  get points async => await GameFLowDB().points();
+  get wordToFind async => await GameFLowDB().wordToFind();
 
   void reset() async {
     this._wordToFind = 0;
@@ -69,39 +69,75 @@ class GameInfo with ChangeNotifier {
 
   void updateWordToFind(int val) {
     this._wordToFind += val;
+    GameFLowDB().changeWordToFind();
   }
 
   void setClue(String newClue) {
     this._clue = newClue;
+    GameFLowDB().changeClue();
     notifyListeners();
   }
 
   void setWordToFind(int val) {
     this._wordToFind = val;
+    GameFLowDB().changeWordToFind();
     notifyListeners();
   }
 
   set setPoints(val) {
     this._points = val;
+    GameFLowDB().changePoints();
     notifyListeners();
   }
 
   set setPlayerTurn(val) {
     this._playerTurn = val;
+    GameFLowDB().changePlayerTurn();
     notifyListeners();
   }
 
-  set setWords(List<WordObj> words) => this._words = words;
-  set chooseWord(int index) => this._words[index].choose = true;
-  set setRole(val) => _role = val;
+  set setWords(List<WordObj> words) {
+    this._words = words;
+  }
 
-  set isGameOver(bool val) => this._isGameOver = val;
-  set groupTurn(int val) => this._groupTurn = val;
-  set hasLeft(bool val) => this._hasLeft = val;
-  set leftToGuess(List val) => this._leftToGuess = val;
-  set leftToGuessGrtoup(int val) =>
-      this._leftToGuess[this._currUser.group] = val;
-  set currUser(UserObj val) => this._currUser = val;
-  set roomName(String val) => this._roomName = val;
-  set thisUser(MyUser val) => this._thisUser = val;
+  set setRole(val) {
+    _role = val;
+  }
+
+  set isGameOver(bool val) {
+    this._isGameOver = val;
+    GameFLowDB().changeIsGameOver();
+  }
+
+  set groupTurn(int val) {
+    this._groupTurn = val;
+    GameFLowDB().changeGroupTurn();
+  }
+
+  set hasLeft(bool val) {
+    this._hasLeft = val;
+    GameFLowDB().changeHasLeft();
+  }
+
+  set leftToGuess(List val) {
+    this._leftToGuess = val;
+    GameFLowDB().changeLeftToGuess();
+  }
+
+  set leftToGuessGrtoup(int val) {
+    this._leftToGuess[this._currUser.group] = val;
+    GameFLowDB().changeLeftToGuess();
+  }
+
+  set currUser(UserObj val) {
+    this._currUser = val;
+  }
+
+  set roomName(String val) {
+    this._roomName = val;
+  }
+
+  set thisUser(MyUser val) {
+    this._thisUser = val;
+  }
 }

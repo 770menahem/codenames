@@ -33,13 +33,11 @@ class _GameState extends State<Game> {
     print("new game");
     print(AuthService().name);
 
-    await WordDB().addWords(WordObj().getWordObj());
+    await WordDB().addWords(WordObj().getWords());
 
     setState(() {
       GameInfo().reset();
     });
-
-    print(await GameFLowDB().getPoint());
   }
 
   _chooseCard(int wordIndex) {
@@ -97,8 +95,10 @@ class _GameState extends State<Game> {
 
     if (word.color == color[0]) {
       points[0]--;
+      GameInfo().setPoints = points;
     } else if (word.color == color[1]) {
       points[1]--;
+      GameInfo().setPoints = points;
     }
 
     if (!GameInfo().isGameOver) {
