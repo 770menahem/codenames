@@ -31,7 +31,7 @@ class User extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage(img[int.parse(playerTurn)]),
+                    image: AssetImage(img[playerTurn]),
                   ),
                 ),
               ),

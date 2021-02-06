@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 
-import '../Const.dart';
-
 class InputClue extends StatelessWidget {
   final Function setNum;
   final Function submit;
@@ -79,7 +77,9 @@ clueForm(
                           : "הכנס מספר חיובי")
                       : "הכנס רק מספרים";
                 },
-                decoration: InputDecoration(hintText: "הכנס מספר"),
+                decoration: InputDecoration(
+                  hintText: "הכנס מספר",
+                ),
               ),
             ],
           ),
@@ -96,7 +96,7 @@ clueForm(
             onPressed: () {
               if (key.currentState.validate()) {
                 setNum(int.parse(numController.text));
-                GameInfo().setClue(clueController.text);
+                GameInfo().setClue = clueController.text;
 
                 submit();
                 Navigator.of(context).pop();

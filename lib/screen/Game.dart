@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newkodenames/firebase/service/Database.dart';
-import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
@@ -23,20 +21,9 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  @override
-  void initState() {
-    super.initState();
-    _newGame();
-  }
-
   _newGame() async {
-    print("new game");
-    print(AuthService().name);
-
-    await WordDB().addWords(WordObj().getWords());
-
-    setState(() {
-      GameInfo().reset();
+    setState(() async {
+      await newGame();
     });
   }
 
@@ -77,12 +64,12 @@ class _GameState extends State<Game> {
   _numToFind(int num) {
     GameInfo().hasLeft = false;
 
-    if (GameInfo().leftToGuess[GameInfo().currUser.group] > 0) {
+    if (GameInfo().leftToGuess[GameInfo().groupTurn] > 0) {
       num++;
       GameInfo().hasLeft = true;
     }
 
-    GameInfo().setWordToFind(num);
+    GameInfo().setWordToFind = num;
   }
 
   _handleChoice(int wordIndex) {
@@ -90,7 +77,8 @@ class _GameState extends State<Game> {
     List points = GameInfo().points;
 
     if (word.color != color[GameInfo().currUser.group]) {
-      GameInfo().updateWordToFind(GameInfo().wordToFind);
+      // GameInfo().updateWordToFind = GameInfo().wordToFind;
+      GameInfo().leftToGuessGrtoup = GameInfo().wordToFind;
     }
 
     if (word.color == color[0]) {
@@ -112,10 +100,10 @@ class _GameState extends State<Game> {
     if ((word.color != color[GameInfo().currUser.group] ||
         GameInfo().wordToFind == 1)) {
       _incrementTurn();
-      GameInfo().setClue("");
-      GameInfo().setWordToFind(0);
+      GameInfo().setClue = "";
+      GameInfo().setWordToFind = 0;
     } else {
-      GameInfo().setWordToFind(GameInfo().wordToFind - 1);
+      GameInfo().setWordToFind = GameInfo().wordToFind - 1;
     }
   }
 
@@ -134,11 +122,12 @@ class _GameState extends State<Game> {
             GameInfo().roomName,
           ),
           actions: [
-            FlatButton(
-              color: Colors.blueGrey[700],
-              child: Text("משחק חדש"),
-              onPressed: _newGame,
-            ),
+            if (GameInfo().thisUser.isOwner)
+              FlatButton(
+                color: Colors.blueGrey[700],
+                child: Text("משחק חדש"),
+                onPressed: _newGame,
+              ),
           ],
         ),
         body: SingleChildScrollView(

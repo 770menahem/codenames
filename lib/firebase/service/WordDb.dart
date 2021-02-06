@@ -59,7 +59,7 @@ class WordDB {
 
   get words => collectionWords.doc('words');
 
-  gatWords() async {
+  getWords() async {
     DocumentSnapshot words = await collectionWords.doc('words').get();
     return words.data()['words'];
   }

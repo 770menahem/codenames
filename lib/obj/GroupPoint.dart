@@ -27,20 +27,20 @@ class GameInfo with ChangeNotifier {
   String _roomName;
   MyUser _thisUser;
 
-  get isGameOver async => await GameFLowDB().isGameOver();
-  get groupTurn async => await GameFLowDB().groupTurn();
-  get hasLeft async => await GameFLowDB().hasLeft();
-  get leftToGuess async => await GameFLowDB().leftToGuess();
+  get isGameOver => this._isGameOver;
+  get groupTurn => this._groupTurn;
+  get hasLeft => this._hasLeft;
+  get leftToGuess => this._leftToGuess;
   get currUser => this._currUser;
   get roomName => this._roomName;
   get thisUser => this._thisUser;
   get words => this._words;
-  get playerTurn async => await GameFLowDB().playerTurn();
+  get playerTurn => this._playerTurn;
   get show => this._showMap;
   get role => this._role;
-  get clue async => await GameFLowDB().clue();
-  get points async => await GameFLowDB().points();
-  get wordToFind async => await GameFLowDB().wordToFind();
+  get clue => this._clue;
+  get points => this._points;
+  get wordToFind => this._wordToFind;
 
   void reset() async {
     this._wordToFind = 0;
@@ -53,8 +53,23 @@ class GameInfo with ChangeNotifier {
     this._isGameOver = false;
     this._hasLeft = false;
     this._currUser = users[0][0];
-    this._words = convertToWordObj(await WordDB().gatWords());
+    this._words = convertToWordObj(await WordDB().getWords());
     GameFLowDB().createGameInfo();
+  }
+
+  void join() async {
+    var gameFlow = await GameFLowDB().all;
+    this._wordToFind = gameFlow['wordToFind'];
+    this._points = gameFlow['points'].cast<int>();
+    this._showMap = false;
+    this._clue = gameFlow['clue'];
+    this._playerTurn = gameFlow['playerTurn'];
+    this._leftToGuess = gameFlow['leftToGuess'];
+    this._groupTurn = gameFlow['groupTurn'];
+    this._isGameOver = gameFlow['isGameOver'];
+    this._hasLeft = gameFlow['hasLeft'];
+    this._currUser = users[this.groupTurn][this.playerTurn];
+    this._words = convertToWordObj(await WordDB().getWords());
   }
 
   void changeShowMap() {
@@ -67,18 +82,18 @@ class GameInfo with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateWordToFind(int val) {
+  set updateWordToFind(int val) {
     this._wordToFind += val;
     GameFLowDB().changeWordToFind();
   }
 
-  void setClue(String newClue) {
+  set setClue(String newClue) {
     this._clue = newClue;
     GameFLowDB().changeClue();
     notifyListeners();
   }
 
-  void setWordToFind(int val) {
+  set setWordToFind(int val) {
     this._wordToFind = val;
     GameFLowDB().changeWordToFind();
     notifyListeners();

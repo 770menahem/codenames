@@ -64,7 +64,7 @@ class GameFLowDB {
 
   Future<int> playerTurn() async {
     DocumentSnapshot res = await collGameFlow.doc("info").get();
-    return await res['playerTurn'];
+    return await res['playerTurn'].map((num) => num as int).toList();
   }
 
   Future<bool> isGameOver() async {
@@ -86,4 +86,6 @@ class GameFLowDB {
     DocumentSnapshot res = await collGameFlow.doc("info").get();
     return await res['leftToGuess'];
   }
+
+  get all async => await collGameFlow.doc("info").get();
 }

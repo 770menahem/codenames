@@ -72,6 +72,7 @@ class _JoinRoomState extends State<JoinRoom> {
                                 await Room().joinToRoom(GameInfo().roomName);
                                 Navigator.pop(context);
                                 Navigator.pushNamed(context, "/roles");
+                                joinGame();
                               } catch (e) {
                                 print(e);
                                 setState(() {

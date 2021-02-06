@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'firebase/service/WordDb.dart';
+import 'firebase/service/authService.dart';
+import 'obj/GroupPoint.dart';
 import 'obj/words.dart';
 
 List color = [Colors.blue[400], Colors.red[400], Colors.black];
@@ -42,4 +45,20 @@ List<WordObj> convertToWordObj(List word) {
 
   wordList.sort((c, n) => c.id.compareTo(n.id));
   return wordList;
+}
+
+newGame() async {
+  print("new game");
+  print(AuthService().name);
+
+  await WordDB().addWords(WordObj().getWords());
+
+  GameInfo().reset();
+}
+
+joinGame() async {
+  print("join game");
+  print(AuthService().name);
+
+  GameInfo().join();
 }

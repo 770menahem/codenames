@@ -6,12 +6,17 @@ class UserObj {
   String name;
   int group;
   String role;
+  bool isOwner;
 
   UserObj({
+    this.isOwner = false,
     @required this.group,
     @required this.name,
     @required this.role,
   });
+
+  get owner => this.isOwner;
+  void makeOwner() => this.isOwner = true;
 }
 
 final List<UserObj> group1 = [
