@@ -26,26 +26,24 @@ class MangerButton extends StatelessWidget {
         SizedBox(
           height: 5,
         ),
+        role.toString().contains("CAPTAIN")
+            ? FlatButton(
+                minWidth: 110.0,
+                color: Colors.amberAccent,
+                child: showmap ? Text("הסתר מפה") : Text("הצג מפה"),
+                onPressed: () {
+                  GameInfo().changeShowMap();
+                },
+              )
+            : Text(''),
         (role.toString().contains("CAPTAIN") &&
-                GameInfo().currUser.role == captain)
-            ? Column(
-                children: [
-                  FlatButton(
-                    minWidth: 110.0,
-                    color: Colors.amberAccent,
-                    child: showmap ? Text("הסתר מפה") : Text("הצג מפה"),
-                    onPressed: () {
-                      GameInfo().changeShowMap();
-                    },
-                  ),
-                  InputClue(
-                    setNum: this.setNum,
-                    submit: this.incrementTurn,
-                  ),
-                ],
+                GameInfo().role == GameInfo().currUser.role)
+            ? InputClue(
+                setNum: this.setNum,
+                submit: this.incrementTurn,
               )
             : (!role.toString().contains("CAPTAIN") &&
-                    GameInfo().currUser.role != captain)
+                    GameInfo().role == GameInfo().currUser.role)
                 ? FlatButton(
                     color: Colors.blueGrey,
                     onPressed: () {

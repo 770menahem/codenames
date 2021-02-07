@@ -20,9 +20,9 @@ final BoxDecoration backgroundTheme = BoxDecoration(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
-      Colors.red[500],
-      Colors.purple[300],
       Colors.blue[500],
+      Colors.purple[300],
+      Colors.red[500],
     ],
   ),
 );

@@ -88,4 +88,10 @@ class GameFLowDB {
   }
 
   get all async => await collGameFlow.doc("info").get();
+
+  void snapShotFlow() {
+    collGameFlow.doc('info').snapshots().listen((querySnapshot) {
+      GameInfo().updete(querySnapshot.data());
+    });
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
@@ -21,6 +22,12 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  @override
+  void initState() {
+    super.initState();
+    GameFLowDB().snapShotFlow();
+  }
+
   _newGame() async {
     setState(() async {
       await newGame();
@@ -36,16 +43,16 @@ class _GameState extends State<Game> {
 
   _incrementTurn() {
     if (!GameInfo().isGameOver) {
-      int groupTurn = GameInfo().groupTurn;
-      GameInfo points = GameInfo();
-      points.hideMap();
+      GameInfo game = GameInfo();
+      game.hideMap();
 
-      points.setPlayerTurn = (points.playerTurn + 1);
-      if (points.playerTurn == users[groupTurn].length) {
-        points.setPlayerTurn = 0;
-        GameInfo().groupTurn = (groupTurn + 1) % users.length;
+      if (game.playerTurn + 1 == users[game.groupTurn].length) {
+        game.setPlayerTurn = 0;
+        GameInfo().groupTurn = (game.groupTurn + 1) % users.length;
+      } else {
+        game.setPlayerTurn = (game.playerTurn + 1);
       }
-      GameInfo().currUser = users[groupTurn][points.playerTurn];
+      GameInfo().currUser = users[game.groupTurn][game.playerTurn];
     }
   }
 
@@ -77,25 +84,12 @@ class _GameState extends State<Game> {
     List points = GameInfo().points;
 
     if (word.color != color[GameInfo().currUser.group]) {
-      // GameInfo().updateWordToFind = GameInfo().wordToFind;
       GameInfo().leftToGuessGrtoup = GameInfo().wordToFind;
     }
 
-    if (word.color == color[0]) {
-      points[0]--;
-      GameInfo().setPoints = points;
-    } else if (word.color == color[1]) {
-      points[1]--;
-      GameInfo().setPoints = points;
-    }
+    updatePoints(word, points);
 
-    if (!GameInfo().isGameOver) {
-      if (points[0] == 0) {
-        endGameMsg(context, _newGame, "you win", color[0]);
-      } else if (points[1] == 0) {
-        endGameMsg(context, _newGame, "you win", color[1]);
-      }
-    }
+    winMsg(points);
 
     if ((word.color != color[GameInfo().currUser.group] ||
         GameInfo().wordToFind == 1)) {
@@ -107,65 +101,108 @@ class _GameState extends State<Game> {
     }
   }
 
-  Widget build(BuildContext context) {
-    final show = Provider.of<GameInfo>(context).show;
-    final captainRole =
-        Provider.of<GameInfo>(context).role.toString().contains("CAPTAIN");
+  void updatePoints(WordObj word, List points) {
+    if (word.color == color[0]) {
+      points[0]--;
+    } else if (word.color == color[1]) {
+      points[1]--;
+    }
+    GameInfo().setPoints = points;
+  }
 
-    return Container(
-      decoration: backgroundTheme,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            GameInfo().roomName,
+  void winMsg(List points) {
+    if (!GameInfo().isGameOver) {
+      GameInfo().isGameOver = false;
+      if (points[0] == 0) {
+        endGameMsg(context, _newGame, "הכחולים ניצחו", color[0]);
+      } else if (points[1] == 0) {
+        endGameMsg(context, _newGame, "האדומים ניצחו", color[1]);
+      }
+    } else {
+      endGameMsg(
+          context,
+          _newGame,
+          "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
+          color[GameInfo().currUser.group]);
+    }
+  }
+
+  SizedBox appBar() {
+    return SizedBox(
+      height: 80.0,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (GameInfo().thisUser.isOwner)
+            FlatButton(
+              color: Colors.blueGrey[700],
+              child: Text("משחק חדש"),
+              onPressed: _newGame,
+            ),
+          SizedBox(
+            width: 1.0,
           ),
-          actions: [
-            if (GameInfo().thisUser.isOwner)
-              FlatButton(
-                color: Colors.blueGrey[700],
-                child: Text("משחק חדש"),
-                onPressed: _newGame,
-              ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              User(),
-              SizedBox(
-                height: 50,
-                child: GameInfo().currUser.role != captain &&
-                        !GameInfo().isGameOver
-                    ? ClueStatus()
-                    : null,
-              ),
-              Board(
-                onChoose: this._chooseCard,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Points(),
-                  SizedBox(
-                    height: 160,
-                    width: 160,
-                    child: show && captainRole ? CaptainMap() : null,
-                  ),
-                  MangerButton(
-                    incrementTurn: _incrementTurn,
-                    setNum: _numToFind,
-                  ),
-                ],
-              ),
-            ],
+          Text(
+            '   חדר:${GameInfo().roomName}',
+            style: TextStyle(fontSize: 30.0),
+            textDirection: TextDirection.rtl,
           ),
-        ),
+        ],
       ),
     );
+  }
+
+  Widget build(BuildContext context) {
+    final show = Provider.of<GameInfo>(context).show;
+    final isCaptain =
+        Provider.of<GameInfo>(context).role.toString().contains("CAPTAIN");
+
+    return StreamBuilder(
+        stream: GameFLowDB().collGameFlow.snapshots(),
+        builder: (context, snapshot) {
+          return Container(
+            decoration: backgroundTheme,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    appBar(),
+                    User(),
+                    SizedBox(
+                      height: 50,
+                      child:
+                          GameInfo().playerTurn == 1 && !GameInfo().isGameOver
+                              ? ClueStatus()
+                              : null,
+                    ),
+                    Board(
+                      onChoose: this._chooseCard,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Points(),
+                        SizedBox(
+                          height: 160,
+                          width: 160,
+                          child: show && isCaptain ? CaptainMap() : null,
+                        ),
+                        MangerButton(
+                          incrementTurn: _incrementTurn,
+                          setNum: _numToFind,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
 

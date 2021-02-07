@@ -22,7 +22,7 @@ class GameInfo with ChangeNotifier {
   bool _isGameOver;
   int _groupTurn;
   bool _hasLeft;
-  List _leftToGuess;
+  List<int> _leftToGuess;
   UserObj _currUser;
   String _roomName;
   MyUser _thisUser;
@@ -59,17 +59,20 @@ class GameInfo with ChangeNotifier {
 
   void join() async {
     var gameFlow = await GameFLowDB().all;
+    updete(gameFlow);
+  }
+
+  void updete(gameFlow) async {
     this._wordToFind = gameFlow['wordToFind'];
     this._points = gameFlow['points'].cast<int>();
     this._showMap = false;
     this._clue = gameFlow['clue'];
     this._playerTurn = gameFlow['playerTurn'];
-    this._leftToGuess = gameFlow['leftToGuess'];
+    this._leftToGuess = gameFlow['leftToGuess'].cast<int>();
     this._groupTurn = gameFlow['groupTurn'];
     this._isGameOver = gameFlow['isGameOver'];
     this._hasLeft = gameFlow['hasLeft'];
     this._currUser = users[this.groupTurn][this.playerTurn];
-    this._words = convertToWordObj(await WordDB().getWords());
   }
 
   void changeShowMap() {
