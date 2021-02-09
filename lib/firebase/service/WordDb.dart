@@ -63,5 +63,6 @@ class WordDB {
     DocumentSnapshot words = await collectionWords.doc('words').get();
     return words.data()['words'];
     // add new line
+    // add new line
   }
 }
