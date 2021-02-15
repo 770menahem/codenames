@@ -1,8 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/firebase/service/GameFlowDb.dart';
-import 'package:newkodenames/firebase/service/WordDb.dart';
-import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/ClueStatus.dart';
 import 'package:newkodenames/obj/words.dart';
@@ -28,15 +27,14 @@ class _GameState extends State<Game> {
     GameFLowDB().snapShotFlow();
   }
 
-  _newGame() async {
-    setState(() async {
-      await newGame();
+  _newGame() {
+    setState(() {
+      newGame();
     });
   }
 
   _chooseCard(int wordIndex) {
     if (GameInfo().currUser.role != captain) {
-      _checkGameOver(wordIndex);
       _handleChoice(wordIndex);
     }
   }
@@ -56,18 +54,6 @@ class _GameState extends State<Game> {
     }
   }
 
-  _checkGameOver(int wordIndex) {
-    if (GameInfo().words[wordIndex].color == color[2]) {
-      GameInfo().isGameOver = true;
-
-      endGameMsg(
-          context,
-          _newGame,
-          "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
-          color[GameInfo().currUser.group]);
-    }
-  }
-
   _numToFind(int num) {
     GameInfo().hasLeft = false;
 
@@ -83,13 +69,16 @@ class _GameState extends State<Game> {
     WordObj word = GameInfo().words[wordIndex];
     List points = GameInfo().points;
 
+    if (word.color == color[2]) {
+      GameInfo().isGameOver = true;
+      return;
+    }
+
     if (word.color != color[GameInfo().currUser.group]) {
       GameInfo().leftToGuessGrtoup = GameInfo().wordToFind;
     }
 
     updatePoints(word, points);
-
-    winMsg(points);
 
     if ((word.color != color[GameInfo().currUser.group] ||
         GameInfo().wordToFind == 1)) {
@@ -110,23 +99,6 @@ class _GameState extends State<Game> {
     GameInfo().setPoints = points;
   }
 
-  void winMsg(List points) {
-    if (!GameInfo().isGameOver) {
-      GameInfo().isGameOver = false;
-      if (points[0] == 0) {
-        endGameMsg(context, _newGame, "הכחולים ניצחו", color[0]);
-      } else if (points[1] == 0) {
-        endGameMsg(context, _newGame, "האדומים ניצחו", color[1]);
-      }
-    } else {
-      endGameMsg(
-          context,
-          _newGame,
-          "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
-          color[GameInfo().currUser.group]);
-    }
-  }
-
   SizedBox appBar() {
     return SizedBox(
       height: 80.0,
@@ -134,12 +106,12 @@ class _GameState extends State<Game> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (GameInfo().thisUser.isOwner)
-            FlatButton(
-              color: Colors.blueGrey[700],
-              child: Text("משחק חדש"),
-              onPressed: _newGame,
-            ),
+          // if (GameInfo().thisUser.isOwner)
+          FlatButton(
+            color: Colors.blueGrey[700],
+            child: Text("משחק חדש"),
+            onPressed: _newGame,
+          ),
           SizedBox(
             width: 1.0,
           ),
@@ -153,6 +125,32 @@ class _GameState extends State<Game> {
     );
   }
 
+  Widget winWidget(context, String msg, Color color) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 250,
+        ),
+        Container(
+          margin: EdgeInsets.all(50),
+          color: Colors.white,
+          child: SizedBox(
+            height: 120,
+            child: Text(
+              msg,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: 24.0,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget build(BuildContext context) {
     final show = Provider.of<GameInfo>(context).show;
     final isCaptain =
@@ -161,42 +159,49 @@ class _GameState extends State<Game> {
     return StreamBuilder(
         stream: GameFLowDB().collGameFlow.snapshots(),
         builder: (context, snapshot) {
+          DocumentSnapshot doc;
+          if (snapshot.hasData) doc = snapshot.data.docChanges[0].doc;
           return Container(
             decoration: backgroundTheme,
             child: Scaffold(
               backgroundColor: Colors.transparent,
               body: SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Stack(
                   children: [
-                    appBar(),
-                    User(),
-                    SizedBox(
-                      height: 50,
-                      child:
-                          GameInfo().playerTurn == 1 && !GameInfo().isGameOver
-                              ? ClueStatus()
-                              : null,
-                    ),
-                    Board(
-                      onChoose: this._chooseCard,
-                    ),
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Points(),
+                        appBar(),
+                        User(),
                         SizedBox(
-                          height: 160,
-                          width: 160,
-                          child: show && isCaptain ? CaptainMap() : null,
+                          height: 50,
+                          child: GameInfo().playerTurn == 1 &&
+                                  !GameInfo().isGameOver
+                              ? ClueStatus()
+                              : null,
                         ),
-                        MangerButton(
-                          incrementTurn: _incrementTurn,
-                          setNum: _numToFind,
+                        Board(
+                          onChoose: this._chooseCard,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Points(),
+                            SizedBox(
+                              height: 160,
+                              width: 160,
+                              child: show && isCaptain ? CaptainMap() : null,
+                            ),
+                            MangerButton(
+                              incrementTurn: _incrementTurn,
+                              setNum: _numToFind,
+                            ),
+                          ],
                         ),
                       ],
                     ),
+                    endGameMsg(doc, context),
                   ],
                 ),
               ),
@@ -204,42 +209,17 @@ class _GameState extends State<Game> {
           );
         });
   }
-}
 
-endGameMsg(BuildContext context, Function newgame, String msg, Color color) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        content: FlatButton(
-          onPressed: () {
-            newgame();
-          },
-          child: Text(
-            msg,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-              fontSize: 24.0,
-            ),
-          ),
-        ),
-        actions: [
-          FlatButton(
-            child: Text(
-              "משחק חדש",
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-              newgame();
-            },
-          ),
-        ],
-      );
-    },
-  );
+  Widget endGameMsg(DocumentSnapshot doc, BuildContext context) {
+    return doc != null && doc['isGameOver']
+        ? winWidget(
+            context,
+            "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
+            color[GameInfo().currUser.group])
+        : (GameInfo().points[0] == 0)
+            ? winWidget(context, "הכחולים ניצחו", color[0])
+            : (GameInfo().points[1] == 0)
+                ? winWidget(context, "האדומים ניצחו", color[1])
+                : Text('');
+  }
 }

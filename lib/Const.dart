@@ -7,7 +7,7 @@ import 'obj/words.dart';
 List color = [Colors.blue[400], Colors.red[400], Colors.black];
 List<String> img = ["img/capten.jpg", "img/player.jpg"];
 const String captain = "captain";
-
+const List<int> startPoint = [9, 8];
 enum Roles {
   CAPTAIN_BLUE,
   CAPTAIN_RED,

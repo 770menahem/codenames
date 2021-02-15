@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 
 class GameFLowDB {
@@ -9,7 +10,7 @@ class GameFLowDB {
 
   createGameInfo() async {
     await collGameFlow.doc("info").set({
-      'points': [8, 9],
+      'points': startPoint,
       'wordToFind': 0,
       'clue': "",
       'playerTurn': 0,

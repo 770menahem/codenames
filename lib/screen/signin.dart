@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/Loading.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';

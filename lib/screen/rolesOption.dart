@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
-
 import 'package:newkodenames/obj/Room.dart';
-
 import '../Const.dart';
 
 class RoleOption extends StatefulWidget {
@@ -13,6 +11,13 @@ class RoleOption extends StatefulWidget {
 
 class _RoleOptionState extends State<RoleOption> {
   final Room room = Room();
+  @override
+  void initState() {
+    if (GameInfo().role != null) {
+      clearRole();
+    }
+    super.initState();
+  }
 
   void clearRole() {
     Roles role = GameInfo().role;

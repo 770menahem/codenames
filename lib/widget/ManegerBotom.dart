@@ -4,8 +4,6 @@ import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/InputClue.dart';
 import 'package:provider/provider.dart';
 
-import '../Const.dart';
-
 class MangerButton extends StatelessWidget {
   final Function incrementTurn;
   final Function setNum;

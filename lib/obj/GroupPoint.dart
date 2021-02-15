@@ -12,7 +12,7 @@ class GameInfo with ChangeNotifier {
   factory GameInfo() => _gameInfo;
   GameInfo._instance();
 
-  List<int> _points = [8, 9];
+  List<int> _points = startPoint;
   int _wordToFind;
   String _clue;
   bool _showMap = true;
@@ -44,7 +44,7 @@ class GameInfo with ChangeNotifier {
 
   void reset() async {
     this._wordToFind = 0;
-    this._points = [9, 8];
+    this._points = startPoint;
     this._showMap = false;
     this._clue = "";
     this._playerTurn = 0;
@@ -114,13 +114,7 @@ class GameInfo with ChangeNotifier {
     notifyListeners();
   }
 
-  set setWords(List<WordObj> words) {
-    this._words = words;
-  }
-
-  set setRole(val) {
-    _role = val;
-  }
+  set setRole(val) => _role = val;
 
   set isGameOver(bool val) {
     this._isGameOver = val;
@@ -147,15 +141,8 @@ class GameInfo with ChangeNotifier {
     GameFLowDB().changeLeftToGuess();
   }
 
-  set currUser(UserObj val) {
-    this._currUser = val;
-  }
-
-  set roomName(String val) {
-    this._roomName = val;
-  }
-
-  set thisUser(MyUser val) {
-    this._thisUser = val;
-  }
+  set setWords(List<WordObj> words) => this._words = words;
+  set currUser(UserObj val) => this._currUser = val;
+  set roomName(String val) => this._roomName = val;
+  set thisUser(MyUser val) => this._thisUser = val;
 }

@@ -6,8 +6,6 @@ import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/words.dart';
 import 'package:provider/provider.dart';
 
-import '../Const.dart';
-
 class MyCard extends StatefulWidget {
   final int wordIndex;
   final Function onChoose;

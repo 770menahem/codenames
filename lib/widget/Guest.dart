@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 
-import '../Const.dart';
-
 class Guest extends StatelessWidget {
   final Function loading;
   final Function error;
