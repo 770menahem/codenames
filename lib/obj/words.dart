@@ -112,7 +112,7 @@ class WordObj {
   });
 
   clearList() {
-    gameWords.clear();
+    userWord.clear();
   }
 
   initList(List list) {
@@ -132,13 +132,19 @@ class WordObj {
     ];
 
     List allWords = Words().getList();
-    clearList();
+    gameWords.clear();
 
     userWord.forEach((e) => e.choose = false);
 
     gameWords.addAll(userWord);
     allWords.shuffle();
 
+    initGameWord(allWords, colors);
+
+    return gameWords;
+  }
+
+  void initGameWord(List allWords, List<Color> colors) {
     int i = 0;
 
     while (gameWords.length < 25) {
@@ -170,8 +176,6 @@ class WordObj {
     gameWords.asMap().forEach((i, element) {
       element.id = i;
     });
-
-    return gameWords;
   }
 
   @override

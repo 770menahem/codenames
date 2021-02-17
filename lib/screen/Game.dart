@@ -6,6 +6,7 @@ import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/ClueStatus.dart';
 import 'package:newkodenames/obj/words.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../Const.dart';
 import '../widget/Board.dart';
@@ -34,7 +35,7 @@ class _GameState extends State<Game> {
   }
 
   _chooseCard(int wordIndex) {
-    if (GameInfo().currUser.role != captain) {
+    if (GameInfo().currUser.role != captain && !GameInfo().isGameOver) {
       _handleChoice(wordIndex);
     }
   }
@@ -133,9 +134,9 @@ class _GameState extends State<Game> {
         ),
         Container(
           margin: EdgeInsets.all(50),
+          padding: EdgeInsets.all(50),
           color: Colors.white,
           child: SizedBox(
-            height: 120,
             child: Text(
               msg,
               textAlign: TextAlign.center,
@@ -211,15 +212,17 @@ class _GameState extends State<Game> {
   }
 
   Widget endGameMsg(DocumentSnapshot doc, BuildContext context) {
-    return doc != null && doc['isGameOver']
-        ? winWidget(
-            context,
-            "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
-            color[GameInfo().currUser.group])
-        : (GameInfo().points[0] == 0)
-            ? winWidget(context, "הכחולים ניצחו", color[0])
-            : (GameInfo().points[1] == 0)
-                ? winWidget(context, "האדומים ניצחו", color[1])
-                : Text('');
+    if (doc != null && doc['isGameOver']) {
+      winWidget(
+          context,
+          "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
+          color[GameInfo().currUser.group]);
+    } else if ((GameInfo().points[0] == 0)) {
+      winWidget(context, "הכחולים ניצחו", color[0]);
+    } else if ((GameInfo().points[1] == 0)) {
+      winWidget(context, "האדומים ניצחו", color[1]);
+    }
+
+    return Text('');
   }
 }

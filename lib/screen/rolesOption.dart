@@ -19,10 +19,16 @@ class _RoleOptionState extends State<RoleOption> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    print("disposr roll");
+    clearRole();
+    super.dispose();
+  }
+
   void clearRole() {
     Roles role = GameInfo().role;
     print("role = " + role.toString());
-
     if (role != null) {
       switch (role) {
         case Roles.CAPTAIN_BLUE:

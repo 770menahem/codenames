@@ -26,7 +26,8 @@ class _MyCardState extends State<MyCard> {
   checkIfChoose(WordObj word) async {
     if (GameInfo().role == GameInfo().currUser.role &&
         GameInfo().currUser.role.toString().contains("G") &&
-        !word.choose) {
+        !word.choose &&
+        !GameInfo().isGameOver) {
       setState(() => loading = true);
 
       try {
