@@ -31,13 +31,9 @@ List<WordObj> convertToWordObj(List word) {
   List<WordObj> wordList = [];
 
   word.forEach((word) {
-    String valueString =
-        word['color'].split('(0x')[1].split(')')[0]; // kind of hacky..
-    int value = int.parse(valueString, radix: 16);
-
     wordList.add(WordObj(
       id: word['id'],
-      color: Color(value),
+      color: Color(word['color']),
       choose: word['choose'] == true,
       word: word['word'],
     ));

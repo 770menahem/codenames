@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/ClueStatus.dart';
 import 'package:newkodenames/obj/words.dart';
-import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-
 import '../Const.dart';
 import '../widget/Board.dart';
 import '../widget/CaptainMap.dart';
@@ -107,7 +106,6 @@ class _GameState extends State<Game> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // if (GameInfo().thisUser.isOwner)
           FlatButton(
             color: Colors.blueGrey[700],
             child: Text("משחק חדש"),
@@ -126,24 +124,36 @@ class _GameState extends State<Game> {
     );
   }
 
-  Widget winWidget(context, String msg, Color color) {
+  Widget endGameWidget(context, String msg, Color color) {
     return Column(
       children: [
         SizedBox(
           height: 250,
         ),
-        Container(
-          margin: EdgeInsets.all(50),
-          padding: EdgeInsets.all(50),
-          color: Colors.white,
-          child: SizedBox(
-            child: Text(
-              msg,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.bold,
-                fontSize: 24.0,
+        Center(
+          child: Container(
+            padding: EdgeInsets.all(100),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: color.withOpacity(0.8),
+                  spreadRadius: 10,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: SizedBox(
+              child: Text(
+                msg,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                ),
               ),
             ),
           ),
@@ -166,44 +176,46 @@ class _GameState extends State<Game> {
             decoration: backgroundTheme,
             child: Scaffold(
               backgroundColor: Colors.transparent,
-              body: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Stack(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        appBar(),
-                        User(),
-                        SizedBox(
-                          height: 50,
-                          child: GameInfo().playerTurn == 1 &&
-                                  !GameInfo().isGameOver
-                              ? ClueStatus()
-                              : null,
-                        ),
-                        Board(
-                          onChoose: this._chooseCard,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Points(),
-                            SizedBox(
-                              height: 160,
-                              width: 160,
-                              child: show && isCaptain ? CaptainMap() : null,
-                            ),
-                            MangerButton(
-                              incrementTurn: _incrementTurn,
-                              setNum: _numToFind,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    endGameMsg(doc, context),
-                  ],
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Stack(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          appBar(),
+                          User(),
+                          SizedBox(
+                            height: 50,
+                            child: GameInfo().playerTurn == 1 &&
+                                    !GameInfo().isGameOver
+                                ? ClueStatus()
+                                : null,
+                          ),
+                          Board(
+                            onChoose: this._chooseCard,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Points(),
+                              SizedBox(
+                                height: 160,
+                                width: 160,
+                                child: show && isCaptain ? CaptainMap() : null,
+                              ),
+                              MangerButton(
+                                incrementTurn: _incrementTurn,
+                                setNum: _numToFind,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      endGameMsg(doc, context),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -213,14 +225,14 @@ class _GameState extends State<Game> {
 
   Widget endGameMsg(DocumentSnapshot doc, BuildContext context) {
     if (doc != null && doc['isGameOver']) {
-      winWidget(
+      return endGameWidget(
           context,
           "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
           color[GameInfo().currUser.group]);
     } else if ((GameInfo().points[0] == 0)) {
-      winWidget(context, "הכחולים ניצחו", color[0]);
+      return endGameWidget(context, "הכחולים ניצחו", color[0]);
     } else if ((GameInfo().points[1] == 0)) {
-      winWidget(context, "האדומים ניצחו", color[1]);
+      return endGameWidget(context, "האדומים ניצחו", color[1]);
     }
 
     return Text('');

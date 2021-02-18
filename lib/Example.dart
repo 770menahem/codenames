@@ -5,40 +5,42 @@ class Example extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.amberAccent[700],
+      body: SafeArea(
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.amberAccent[700],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    color: Colors.green,
+                  Expanded(
+                    child: Container(
+                      color: Colors.green,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    color: Colors.amberAccent[700],
+                  Expanded(
+                    child: Container(
+                      color: Colors.amberAccent[700],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.yellow,
+            Expanded(
+              child: Container(
+                color: Colors.yellow,
+              ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.blue,
+            Expanded(
+              child: Container(
+                color: Colors.blue,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

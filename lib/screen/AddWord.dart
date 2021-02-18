@@ -97,66 +97,59 @@ class _AddWordState extends State<AddWord> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
-        // appBar: AppBar(
-        //   title: Center(
-        //     child: Text(
-        //       "הוסף מילים",
-        //       textDirection: TextDirection.rtl,
-        //     ),
-        //   ),
-        //   actions: actionBtn,
-        // ),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 40.0,
-            ),
-            gridBoard,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                FlatButton.icon(
-                  color: Colors.green,
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0)),
-                  icon: Icon(Icons.save),
-                  onPressed: () {
-                    addToList();
-                    Navigator.pop(context);
-                  },
-                  label: Text("הוסף"),
-                ),
-                FlatButton.icon(
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0)),
-                  color: Colors.red,
-                  icon: Icon(Icons.delete_forever),
-                  onPressed: () {
-                    WordObj().clearList();
-                    AddWord.wordToAdd.clear();
-                    setState(() {
-                      controllers.clear();
-                    });
-                  },
-                  label: Text("אפס"),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Text(
-              "הכנס מילים כרצונך.\n" +
-                  "הסדר לא משנה הם יתערבבו לפני המשחק,\n" +
-                  "משבצות שישארו ריקות ימולאו במילים אחרות!",
-              style: TextStyle(
-                fontSize: 30.0,
+        body: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 40.0,
               ),
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.rtl,
-            ),
-          ],
+              gridBoard,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  FlatButton.icon(
+                    color: Colors.green,
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    icon: Icon(Icons.save),
+                    onPressed: () {
+                      addToList();
+                      Navigator.pop(context);
+                    },
+                    label: Text("הוסף"),
+                  ),
+                  FlatButton.icon(
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    color: Colors.red,
+                    icon: Icon(Icons.delete_forever),
+                    onPressed: () {
+                      WordObj().clearList();
+                      AddWord.wordToAdd.clear();
+                      setState(() {
+                        controllers.clear();
+                      });
+                    },
+                    label: Text("אפס"),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text(
+                "הכנס מילים כרצונך.\n" +
+                    "הסדר לא משנה הם יתערבבו לפני המשחק,\n" +
+                    "משבצות שישארו ריקות ימולאו במילים אחרות!",
+                style: TextStyle(
+                  fontSize: 30.0,
+                ),
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.rtl,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -24,83 +24,86 @@ class _JoinRoomState extends State<JoinRoom> {
         backgroundColor: Colors.transparent,
         body: loading
             ? Loading()
-            : SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 250.0,
-                      ),
-                      SizedBox(
-                        child: Text(
-                          "הכנס שם חדר",
-                          style: TextStyle(
-                            color: Colors.deepOrange,
-                            fontSize: 50.0,
-                          ),
+            : SafeArea(
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 250.0,
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20.0),
-                        child: SizedBox(
-                          height: 70.0,
-                          child: TextFormField(
-                            textDirection: TextDirection.rtl,
-                            decoration: InputDecoration(
-                              labelText: 'שם',
+                        SizedBox(
+                          child: Text(
+                            "הכנס שם חדר",
+                            style: TextStyle(
+                              color: Colors.deepOrange,
+                              fontSize: 50.0,
                             ),
-                            validator: (val) => val.isEmpty ? 'הכנס שם' : null,
-                            onChanged: (val) {
-                              setState(() {
-                                GameInfo().roomName = val;
-                              });
-                            },
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 40.0,
-                        child: RaisedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              setState(() {
-                                loading = true;
-                              });
-
-                              try {
-                                await Room().joinToRoom(GameInfo().roomName);
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context, "/roles");
-                                joinGame();
-                              } catch (e) {
-                                print(e);
-                                setState(() {
-                                  loading = false;
-                                  error = 'חדר לא קיים';
-                                });
-                              }
-                            }
-                          },
-                          color: Colors.pink,
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 20.0),
                           child: SizedBox(
-                            width: 80.0,
-                            child: Center(
-                              child: Text(
-                                'הצטרף',
-                                style: TextStyle(
-                                  color: Colors.white,
+                            height: 70.0,
+                            child: TextFormField(
+                              textDirection: TextDirection.rtl,
+                              decoration: InputDecoration(
+                                labelText: 'שם',
+                              ),
+                              validator: (val) =>
+                                  val.isEmpty ? 'הכנס שם' : null,
+                              onChanged: (val) {
+                                setState(() {
+                                  GameInfo().roomName = val;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40.0,
+                          child: RaisedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                setState(() {
+                                  loading = true;
+                                });
+
+                                try {
+                                  await Room().joinToRoom(GameInfo().roomName);
+                                  Navigator.pop(context);
+                                  Navigator.pushNamed(context, "/roles");
+                                  joinGame();
+                                } catch (e) {
+                                  print(e);
+                                  setState(() {
+                                    loading = false;
+                                    error = 'חדר לא קיים';
+                                  });
+                                }
+                              }
+                            },
+                            color: Colors.pink,
+                            child: SizedBox(
+                              width: 80.0,
+                              child: Center(
+                                child: Text(
+                                  'הצטרף',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 70.0,
-                        child: Text(error),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 70.0,
+                          child: Text(error),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

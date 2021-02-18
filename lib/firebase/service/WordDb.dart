@@ -27,7 +27,7 @@ class WordDB {
         "id": word.id,
         "word": word.word,
         "choose": word.choose,
-        "color": word.color.toString(),
+        "color": word.color.value,
       });
     });
 
@@ -41,7 +41,7 @@ class WordDB {
           "id": word.id,
           "word": word.word,
           "choose": word.choose,
-          "color": word.color.toString(),
+          "color": word.color.value,
         }
       ])
     });
@@ -51,7 +51,7 @@ class WordDB {
           "id": word.id,
           "word": word.word,
           "choose": true,
-          "color": word.color.toString(),
+          "color": word.color.value,
         }
       ])
     });
@@ -62,7 +62,5 @@ class WordDB {
   getWords() async {
     DocumentSnapshot words = await collectionWords.doc('words').get();
     return words.data()['words'];
-    // add new line
-    // add new line
   }
 }

@@ -22,21 +22,23 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                'הי\nבואו\nנשמקד',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.deepOrangeAccent,
-                  fontWeight: FontWeight.w900,
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  'הי\nבואו\nנשמקד',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    color: Colors.deepOrangeAccent,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
-              ),
-              (user != null) ? GameMenu() : SignIn(),
-            ],
+                (user != null) ? GameMenu() : SignIn(),
+              ],
+            ),
           ),
         ),
       ),
