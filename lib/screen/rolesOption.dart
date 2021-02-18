@@ -89,52 +89,52 @@ class _RoleOptionState extends State<RoleOption> {
     ).createShader(Rect.fromLTWH(0.0, 0.0, 350.0, 70.0));
 
     return Scaffold(
-      body: SafeArea(
-        child: StreamBuilder(
-            stream: PlayerDB().collectionGame.snapshots(),
-            builder: (context, snapshot) {
-              return Container(
-                decoration: backgroundTheme,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "בחר תפקיד",
-                        style: TextStyle(
-                          fontSize: 35.0,
-                          fontWeight: FontWeight.bold,
-                          foreground: Paint()..shader = linearGradient,
-                        ),
+      body: StreamBuilder(
+          stream: PlayerDB().collectionGame.snapshots(),
+          builder: (context, snapshot) {
+            var bc = snapshot.data.docChanges[0].doc['blueGroup']['captain'];
+            var rc = snapshot.data.docChanges[0].doc['redGroup']['captain'];
+            print(bc);
+            print(rc);
+
+            return Container(
+              decoration: backgroundTheme,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "בחר תפקיד",
+                      style: TextStyle(
+                        fontSize: 35.0,
+                        fontWeight: FontWeight.bold,
+                        foreground: Paint()..shader = linearGradient,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          room.blueCaptain.length == 0
-                              ? btn(
-                                  "קפטן", 0, Colors.blue, room.setCaptainToBlue)
-                              : btn("קפטן", 0, Colors.blue.withOpacity(0.2),
-                                  null),
-                          room.redCaptain.length == 0
-                              ? btn("קפטן", 0, Colors.red, room.setCaptainToRed)
-                              : btn(
-                                  "קפטן", 0, Colors.red.withOpacity(0.2), null),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          btn("מנחש", 1, Colors.blue[600],
-                              room.addGuesserToBlue),
-                          btn("מנחש", 1, Colors.red[600], room.addGuesserToRed),
-                        ],
-                      ),
-                    ],
-                  ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        bc.length == 0
+                            ? btn("קפטן", 0, Colors.blue, room.setCaptainToBlue)
+                            : btn(
+                                "קפטן", 0, Colors.blue.withOpacity(0.2), null),
+                        rc.length == 0
+                            ? btn("קפטן", 0, Colors.red, room.setCaptainToRed)
+                            : btn("קפטן", 0, Colors.red.withOpacity(0.2), null),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        btn("מנחש", 1, Colors.blue[600], room.addGuesserToBlue),
+                        btn("מנחש", 1, Colors.red[600], room.addGuesserToRed),
+                      ],
+                    ),
+                  ],
                 ),
-              );
-            }),
-      ),
+              ),
+            );
+          }),
     );
   }
 }
