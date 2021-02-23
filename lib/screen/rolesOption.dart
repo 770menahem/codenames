@@ -92,11 +92,16 @@ class _RoleOptionState extends State<RoleOption> {
       body: StreamBuilder(
           stream: PlayerDB().collectionGame.snapshots(),
           builder: (context, snapshot) {
-            var bc = snapshot.data.docChanges[0].doc['blueGroup']['captain'];
-            var rc = snapshot.data.docChanges[0].doc['redGroup']['captain'];
-            print(bc);
-            print(rc);
-
+            var blueCaptain;
+            var redCaptain;
+            var docRoom = snapshot.data.docChanges[0].doc;
+            if (snapshot.hasData) {
+              blueCaptain = docRoom['blueGroup']['captain'];
+              redCaptain = docRoom['redGroup']['captain'];
+            } else {
+              blueCaptain = Room().blueCaptain;
+              redCaptain = Room().redCaptain;
+            }
             return Container(
               decoration: backgroundTheme,
               child: Center(
@@ -114,11 +119,13 @@ class _RoleOptionState extends State<RoleOption> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        bc.length == 0
+                        blueCaptain.length == 0 ||
+                                blueCaptain['id'] == GameInfo().thisUser.uid
                             ? btn("קפטן", 0, Colors.blue, room.setCaptainToBlue)
                             : btn(
                                 "קפטן", 0, Colors.blue.withOpacity(0.2), null),
-                        rc.length == 0
+                        redCaptain.length == 0 ||
+                                redCaptain['id'] == GameInfo().thisUser.uid
                             ? btn("קפטן", 0, Colors.red, room.setCaptainToRed)
                             : btn("קפטן", 0, Colors.red.withOpacity(0.2), null),
                       ],

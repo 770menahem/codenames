@@ -5,6 +5,8 @@ import 'package:newkodenames/Loading.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/Guest.dart';
 
+import '../Const.dart';
+
 class SignIn extends StatefulWidget {
   @override
   _SignInState createState() => _SignInState();
@@ -69,8 +71,18 @@ class _SignInState extends State<SignIn> {
                   space,
                   Text(error),
                   space,
-                  RaisedButton(
-                    onPressed: () async {
+                  btnWidth(
+                    SizedBox(
+                      width: 80.0,
+                      child: Center(
+                        child: Text(
+                          'התחבר',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    Colors.pink,
+                    () async {
                       if (_formKey.currentState.validate()) {
                         loadingStatus(true);
 
@@ -83,31 +95,21 @@ class _SignInState extends State<SignIn> {
                         }
                       }
                     },
-                    color: Colors.pink,
-                    child: SizedBox(
-                      width: 80.0,
-                      child: Center(
-                        child: Text(
-                          'התחבר',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
                   ),
                   Guest(
                     auth: _auth,
                     loading: loadingStatus,
                     error: errorMsg,
                   ),
-                  RaisedButton(
-                    onPressed: () async {
-                      Navigator.pushNamed(context, '/register');
-                    },
-                    color: Colors.pink,
-                    child: Text(
+                  btnWidth(
+                    Text(
                       'הירשם',
                       style: TextStyle(color: Colors.white),
                     ),
+                    Colors.pink,
+                    () async {
+                      Navigator.pushNamed(context, '/register');
+                    },
                   ),
                 ],
               ),

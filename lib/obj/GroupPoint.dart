@@ -12,7 +12,8 @@ class GameInfo with ChangeNotifier {
   factory GameInfo() => _gameInfo;
   GameInfo._instance();
 
-  List<int> _points = startPoint;
+  int _pointsBlue = startPoint[0];
+  int _pointsRed = startPoint[1];
   int _wordToFind;
   String _clue;
   bool _showMap = true;
@@ -22,7 +23,8 @@ class GameInfo with ChangeNotifier {
   bool _isGameOver;
   int _groupTurn;
   bool _hasLeft;
-  List<int> _leftToGuess;
+  int _leftToGuessBlue;
+  int _leftToGuessRed;
   UserObj _currUser;
   String _roomName;
   MyUser _thisUser;
@@ -30,7 +32,8 @@ class GameInfo with ChangeNotifier {
   get isGameOver => this._isGameOver;
   get groupTurn => this._groupTurn;
   get hasLeft => this._hasLeft;
-  get leftToGuess => this._leftToGuess;
+  get leftToGuessBlue => this._leftToGuessBlue;
+  get leftToGuessRed => this._leftToGuessRed;
   get currUser => this._currUser;
   get roomName => this._roomName;
   get thisUser => this._thisUser;
@@ -39,16 +42,19 @@ class GameInfo with ChangeNotifier {
   get show => this._showMap;
   get role => this._role;
   get clue => this._clue;
-  get points => this._points;
+  get pointsBlue => this._pointsBlue;
+  get pointsRed => this._pointsRed;
   get wordToFind => this._wordToFind;
 
   void reset() async {
     this._wordToFind = 0;
-    this._points = startPoint;
+    this._pointsBlue = startPoint[0];
+    this._pointsRed = startPoint[1];
     this._showMap = false;
     this._clue = "";
     this._playerTurn = 0;
-    this._leftToGuess = [0, 0];
+    this._leftToGuessBlue = 0;
+    this._leftToGuessRed = 0;
     this._groupTurn = 0;
     this._isGameOver = false;
     this._hasLeft = false;
@@ -64,11 +70,13 @@ class GameInfo with ChangeNotifier {
 
   void updete(gameFlow) async {
     this._wordToFind = gameFlow['wordToFind'];
-    this._points = gameFlow['points'].cast<int>();
+    this._pointsBlue = gameFlow['pointsBlue'];
+    this._pointsRed = gameFlow['pointsRed'];
     this._showMap = false;
     this._clue = gameFlow['clue'];
     this._playerTurn = gameFlow['playerTurn'];
-    this._leftToGuess = gameFlow['leftToGuess'].cast<int>();
+    this._leftToGuessBlue = gameFlow['leftToGuessBlue'];
+    this._leftToGuessRed = gameFlow['leftToGuessRed'];
     this._groupTurn = gameFlow['groupTurn'];
     this._isGameOver = gameFlow['isGameOver'];
     this._hasLeft = gameFlow['hasLeft'];
@@ -87,7 +95,7 @@ class GameInfo with ChangeNotifier {
 
   set updateWordToFind(int val) {
     this._wordToFind += val;
-    GameFLowDB().changeWordToFind();
+    GameFLowDB().changeWordToFind(val);
   }
 
   set setClue(String newClue) {
@@ -97,14 +105,20 @@ class GameInfo with ChangeNotifier {
   }
 
   set setWordToFind(int val) {
-    this._wordToFind = val;
-    GameFLowDB().changeWordToFind();
+    this._wordToFind += val;
+    GameFLowDB().changeWordToFind(val);
     notifyListeners();
   }
 
-  set setPoints(val) {
-    this._points = val;
-    GameFLowDB().changePoints();
+  set setPointsBlue(val) {
+    this._pointsBlue += val;
+    GameFLowDB().changePointsBlue(val);
+    notifyListeners();
+  }
+
+  set setPointsRed(val) {
+    this._pointsRed += val;
+    GameFLowDB().changePointsRed(val);
     notifyListeners();
   }
 
@@ -131,14 +145,14 @@ class GameInfo with ChangeNotifier {
     GameFLowDB().changeHasLeft();
   }
 
-  set leftToGuess(List val) {
-    this._leftToGuess = val;
-    GameFLowDB().changeLeftToGuess();
+  set leftToGuessBlue(int val) {
+    this._leftToGuessBlue += val;
+    GameFLowDB().changeLeftToGuessBlue(val);
   }
 
-  set leftToGuessGrtoup(int val) {
-    this._leftToGuess[this._currUser.group] = val;
-    GameFLowDB().changeLeftToGuess();
+  set leftToGuessRed(int val) {
+    this._leftToGuessRed += val;
+    GameFLowDB().changeLeftToGuessRed(val);
   }
 
   set setWords(List<WordObj> words) => this._words = words;

@@ -45,8 +45,9 @@ class MangerButton extends StatelessWidget {
                 ? FlatButton(
                     color: Colors.blueGrey,
                     onPressed: () {
-                      GameInfo().leftToGuess[GameInfo().currUser.group] +=
-                          GameInfo().wordToFind;
+                      GameInfo().currUser.group == 0
+                          ? GameInfo().leftToGuessBlue += GameInfo().wordToFind
+                          : GameInfo().leftToGuessRed += GameInfo().wordToFind;
                       this.incrementTurn();
                     },
                     child: Text('סיים תור'),

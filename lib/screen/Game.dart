@@ -57,7 +57,11 @@ class _GameState extends State<Game> {
   _numToFind(int num) {
     GameInfo().hasLeft = false;
 
-    if (GameInfo().leftToGuess[GameInfo().groupTurn] > 0) {
+    final group = GameInfo().groupTurn == 0
+        ? GameInfo().leftToGuessBlue
+        : GameInfo().leftToGuessRed;
+
+    if (group > 0) {
       num++;
       GameInfo().hasLeft = true;
     }
@@ -67,7 +71,6 @@ class _GameState extends State<Game> {
 
   _handleChoice(int wordIndex) {
     WordObj word = GameInfo().words[wordIndex];
-    List points = GameInfo().points;
 
     if (word.color == color[2]) {
       GameInfo().isGameOver = true;
@@ -75,28 +78,29 @@ class _GameState extends State<Game> {
     }
 
     if (word.color != color[GameInfo().currUser.group]) {
-      GameInfo().leftToGuessGrtoup = GameInfo().wordToFind;
+      GameInfo().groupTurn == 0
+          ? GameInfo().leftToGuessBlue = GameInfo().wordToFind
+          : GameInfo().leftToGuessRed = GameInfo().wordToFind;
     }
 
-    updatePoints(word, points);
+    updatePoints(word.color);
 
     if ((word.color != color[GameInfo().currUser.group] ||
         GameInfo().wordToFind == 1)) {
       _incrementTurn();
       GameInfo().setClue = "";
-      GameInfo().setWordToFind = 0;
+      GameInfo().setWordToFind = -GameInfo().wordToFind;
     } else {
-      GameInfo().setWordToFind = GameInfo().wordToFind - 1;
+      GameInfo().setWordToFind = -1;
     }
   }
 
-  void updatePoints(WordObj word, List points) {
-    if (word.color == color[0]) {
-      points[0]--;
-    } else if (word.color == color[1]) {
-      points[1]--;
+  void updatePoints(Color wordColor) {
+    if (wordColor == color[0]) {
+      GameInfo().setPointsBlue = -1;
+    } else if (wordColor == color[1]) {
+      GameInfo().setPointsRed = -1;
     }
-    GameInfo().setPoints = points;
   }
 
   SizedBox appBar() {
@@ -128,7 +132,7 @@ class _GameState extends State<Game> {
     return Column(
       children: [
         SizedBox(
-          height: 250,
+          height: MediaQuery.of(context).size.height * 0.25,
         ),
         Center(
           child: Container(
@@ -229,9 +233,9 @@ class _GameState extends State<Game> {
           context,
           "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
           color[GameInfo().currUser.group]);
-    } else if ((GameInfo().points[0] == 0)) {
+    } else if ((GameInfo().pointsBlue == 0)) {
       return endGameWidget(context, "הכחולים ניצחו", color[0]);
-    } else if ((GameInfo().points[1] == 0)) {
+    } else if ((GameInfo().pointsRed == 0)) {
       return endGameWidget(context, "האדומים ניצחו", color[1]);
     }
 

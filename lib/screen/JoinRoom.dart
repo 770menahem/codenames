@@ -63,8 +63,20 @@ class _JoinRoomState extends State<JoinRoom> {
                         ),
                         SizedBox(
                           height: 40.0,
-                          child: RaisedButton(
-                            onPressed: () async {
+                          child: btnWidth(
+                            SizedBox(
+                              width: 80.0,
+                              child: Center(
+                                child: Text(
+                                  'הצטרף',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Colors.pink,
+                            () async {
                               if (_formKey.currentState.validate()) {
                                 setState(() {
                                   loading = true;
@@ -84,18 +96,6 @@ class _JoinRoomState extends State<JoinRoom> {
                                 }
                               }
                             },
-                            color: Colors.pink,
-                            child: SizedBox(
-                              width: 80.0,
-                              child: Center(
-                                child: Text(
-                                  'הצטרף',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
                           ),
                         ),
                         SizedBox(

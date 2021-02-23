@@ -28,13 +28,14 @@ class Points extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final point = Provider.of<GameInfo>(context).points;
+    final pointBlue = Provider.of<GameInfo>(context).pointsBlue;
+    final pointRed = Provider.of<GameInfo>(context).pointsRed;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        points(color[0], point[0]),
-        points(color[1], point[1]),
+        points(color[0], pointBlue),
+        points(color[1], pointRed),
       ],
     );
   }

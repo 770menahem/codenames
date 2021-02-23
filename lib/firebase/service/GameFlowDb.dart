@@ -10,23 +10,34 @@ class GameFLowDB {
 
   createGameInfo() async {
     await collGameFlow.doc("info").set({
-      'points': startPoint,
+      'pointsBlue': startPoint[0],
+      'pointsRed': startPoint[1],
       'wordToFind': 0,
       'clue': "",
       'playerTurn': 0,
       'isGameOver': false,
       'groupTurn': 0,
       'hasLeft': false,
-      'leftToGuess': [0, 0],
+      'leftToGuessBlue': 0,
+      'leftToGuessRed': 0,
     });
   }
 
-  changePoints() async =>
-      await collGameFlow.doc("info").update({'points': GameInfo().points});
+  changePointsBlue(val) async {
+    await collGameFlow
+        .doc("info")
+        .update({'pointsBlue': FieldValue.increment(val)});
+  }
 
-  changeWordToFind() async => await collGameFlow
+  changePointsRed(val) async {
+    await collGameFlow
+        .doc("info")
+        .update({'pointsRed': FieldValue.increment(val)});
+  }
+
+  changeWordToFind(val) async => await collGameFlow
       .doc("info")
-      .update({'wordToFind': GameInfo().wordToFind});
+      .update({'wordToFind': FieldValue.increment(val)});
 
   changeClue() async =>
       await collGameFlow.doc("info").update({'clue': GameInfo().clue});
@@ -42,15 +53,26 @@ class GameFLowDB {
   changeGroupTurn() async => await collGameFlow
       .doc("info")
       .update({'groupTurn': GameInfo().groupTurn});
+
   changeHasLeft() async =>
       await collGameFlow.doc("info").update({'hasLeft': GameInfo().hasLeft});
-  changeLeftToGuess() async => await collGameFlow
-      .doc("info")
-      .update({'leftToGuess': GameInfo().leftToGuess});
 
-  Future<List> points() async {
+  changeLeftToGuessBlue(val) async => await collGameFlow
+      .doc("info")
+      .update({'leftToGuessBlue': FieldValue.increment(val)});
+
+  changeLeftToGuessRed(val) async => await collGameFlow
+      .doc("info")
+      .update({'leftToGuessRed': FieldValue.increment(val)});
+
+  Future<List> pointsBlue() async {
     DocumentSnapshot res = await collGameFlow.doc("info").get();
-    return await res['points'];
+    return await res['pointsBlue'];
+  }
+
+  Future<List> pointsRed() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['pointsRed'];
   }
 
   Future<int> wordToFind() async {
@@ -83,9 +105,14 @@ class GameFLowDB {
     return await res['hasLeft'];
   }
 
-  Future<List> leftToGuess() async {
+  Future<List> leftToGuessBlue() async {
     DocumentSnapshot res = await collGameFlow.doc("info").get();
-    return await res['leftToGuess'];
+    return await res['leftToGuessBlue'];
+  }
+
+  Future<List> leftToGuessRed() async {
+    DocumentSnapshot res = await collGameFlow.doc("info").get();
+    return await res['leftToGuessRed'];
   }
 
   get all async => await collGameFlow.doc("info").get();

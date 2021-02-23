@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 
@@ -11,8 +12,13 @@ class Guest extends StatelessWidget {
   const Guest({Key key, this.loading, this.auth, this.error}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: () async {
+    return btnWidth(
+      Text(
+        'היכנס כאורח',
+        style: TextStyle(color: Colors.white),
+      ),
+      Colors.pink,
+      () async {
         loading(true);
 
         dynamic newUser = await auth.singInAnon();
@@ -23,11 +29,6 @@ class Guest extends StatelessWidget {
           loading(false);
         }
       },
-      color: Colors.pink,
-      child: Text(
-        'היכנס כאורח',
-        style: TextStyle(color: Colors.white),
-      ),
     );
   }
 }
