@@ -32,11 +32,13 @@ class PlayerDB {
           },
           'blueGroup': {
             'captain': {},
-            'guessers': [],
+            'guesser': {},
+            'counselors': [],
           },
           'redGroup': {
             'captain': {},
-            'guessers': [],
+            'guesser': {},
+            'counselors': [],
           },
         });
 
@@ -59,9 +61,17 @@ class PlayerDB {
     }
   }
 
-  Future delGuesser(String room, String group, guessers) async {
+  Future delGuesser(String room, String group) async {
     try {
-      await collectionGame.doc(room).update({'$group.guessers': guessers});
+      await collectionGame.doc(room).update({'$group.guesser': {}});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future delCounselor(String room, String group, counselor) async {
+    try {
+      await collectionGame.doc(room).update({'$group.counselors': counselor});
     } catch (e) {
       print(e);
     }
@@ -77,15 +87,25 @@ class PlayerDB {
     });
   }
 
-  Future addGuesser(String room, String group) async {
+  Future addCounselor(String room, String group) async {
     MyUser user = GameInfo().thisUser;
     await collectionGame.doc(room).update({
-      '$group.guessers': FieldValue.arrayUnion([
+      '$group.counselors': FieldValue.arrayUnion([
         {
           "id": user.uid,
           "name": user.name,
         }
       ])
+    });
+  }
+
+  Future addGuesser(String room, String group) async {
+    MyUser user = GameInfo().thisUser;
+    await collectionGame.doc(room).update({
+      '$group.guesser': {
+        "id": user.uid,
+        "name": user.name,
+      }
     });
   }
 

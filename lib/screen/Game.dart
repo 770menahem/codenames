@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:provider/provider.dart';
 
 import 'package:newkodenames/firebase/service/GameFlowDb.dart';
@@ -69,14 +70,13 @@ class _GameState extends State<Game> {
     GameInfo().setWordToFind = num;
   }
 
-  _handleChoice(int wordIndex) {
+  _handleChoice(int wordIndex) async {
     WordObj word = GameInfo().words[wordIndex];
 
     if (word.color == color[2]) {
       GameInfo().isGameOver = true;
       return;
     }
-
     if (word.color != color[GameInfo().currUser.group]) {
       GameInfo().groupTurn == 0
           ? GameInfo().leftToGuessBlue = GameInfo().wordToFind
@@ -86,13 +86,15 @@ class _GameState extends State<Game> {
     updatePoints(word.color);
 
     if ((word.color != color[GameInfo().currUser.group] ||
-        GameInfo().wordToFind == 1)) {
+        GameInfo().wordToFind <= 1)) {
       _incrementTurn();
       GameInfo().setClue = "";
       GameInfo().setWordToFind = -GameInfo().wordToFind;
     } else {
-      GameInfo().setWordToFind = -1;
+      GameInfo().setWordToFind = 0;
     }
+
+    await WordDB().choosing(word);
   }
 
   void updatePoints(Color wordColor) {
@@ -175,7 +177,9 @@ class _GameState extends State<Game> {
         stream: GameFLowDB().collGameFlow.snapshots(),
         builder: (context, snapshot) {
           DocumentSnapshot doc;
-          if (snapshot.hasData) doc = snapshot.data.docChanges[0].doc;
+          if (snapshot.hasData) {
+            doc = snapshot.data.docChanges[0].doc;
+          }
           return Container(
             decoration: backgroundTheme,
             child: Scaffold(

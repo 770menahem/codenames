@@ -16,17 +16,21 @@ class Room extends ChangeNotifier {
     'name': '',
     'blueGroup': {
       'captain': {},
-      'guessers': [],
+      'guesser': {},
+      'counselors': [],
     },
     'redGroup': {
       'captain': {},
-      'guessers': [],
+      'guesser': {},
+      'counselors': [],
     },
   };
 
   get blueCaptain => this._room['blueGroup']['captain'];
 
   get redCaptain => this._room['redGroup']['captain'];
+  get redGuesser => this._room['redGroup']['guesser'];
+  get blueGuesser => this._room['blueGroup']['guesser'];
 
   get room => this._room;
 
@@ -46,10 +50,15 @@ class Room extends ChangeNotifier {
   }
 
   void removeGuesser(String group) {
-    _room[group]['guessers']
-        .removeWhere((guesser) => GameInfo().thisUser.uid == guesser['id']);
+    _room[group]['guesser'] = {};
+    PlayerDB().delGuesser(_room['name'], group);
+  }
 
-    PlayerDB().delGuesser(_room['name'], group, _room[group]['guessers']);
+  void removeCounselor(String group) {
+    _room[group]['counselors']
+        .removeWhere((counselor) => GameInfo().thisUser.uid == counselor['id']);
+
+    PlayerDB().delCounselor(_room['name'], group, _room[group]['counselors']);
   }
 
   dynamic setOwner() async {
@@ -67,11 +76,13 @@ class Room extends ChangeNotifier {
         'name': GameInfo().roomName,
         'blueGroup': {
           'captain': {},
-          'guessers': [],
+          'guesser': {},
+          'counselors': [],
         },
         'redGroup': {
           'captain': {},
-          'guessers': [],
+          'guesser': {},
+          'counselors': [],
         },
       };
 
@@ -84,12 +95,9 @@ class Room extends ChangeNotifier {
   dynamic setCaptainToBlue() async {
     await PlayerDB().addCaptain(GameInfo().roomName, 'blueGroup');
 
-    this._room['blueGroup'] = {
-      'captain': {
-        'id': GameInfo().thisUser.uid,
-        "name": GameInfo().thisUser.name,
-      },
-      'guessers': [...this._room['blueGroup']['guessers']],
+    this._room['blueGroup']['captain'] = {
+      'id': GameInfo().thisUser.uid,
+      "name": GameInfo().thisUser.name,
     };
 
     GameInfo().setRole = Roles.CAPTAIN_BLUE;
@@ -98,12 +106,9 @@ class Room extends ChangeNotifier {
   dynamic setCaptainToRed() async {
     await PlayerDB().addCaptain(GameInfo().roomName, 'redGroup');
 
-    this._room['redGroup'] = {
-      'captain': {
-        'id': GameInfo().thisUser.uid,
-        "name": GameInfo().thisUser.name,
-      },
-      'guessers': [...this._room['redGroup']['guessers']],
+    this._room['redGroup']['captain'] = {
+      'id': GameInfo().thisUser.uid,
+      "name": GameInfo().thisUser.name,
     };
     GameInfo().setRole = Roles.CAPTAIN_RED;
   }
@@ -111,10 +116,10 @@ class Room extends ChangeNotifier {
   dynamic addGuesserToBlue() async {
     await PlayerDB().addGuesser(GameInfo().roomName, "blueGroup");
 
-    this._room['blueGroup']['guessers'].add({
+    this._room['blueGroup']['guesser'] = {
       'id': GameInfo().thisUser.uid,
       "name": GameInfo().thisUser.name,
-    });
+    };
 
     GameInfo().setRole = Roles.GUESSER_BLUE;
   }
@@ -122,11 +127,33 @@ class Room extends ChangeNotifier {
   dynamic addGuesserToRed() async {
     await PlayerDB().addGuesser(GameInfo().roomName, "redGroup");
 
-    this._room['redGroup']['guessers'].add({
+    this._room['redGroup']['guesser'] = {
+      'id': GameInfo().thisUser.uid,
+      "name": GameInfo().thisUser.name,
+    };
+
+    GameInfo().setRole = Roles.GUESSER_RED;
+  }
+
+  dynamic addCounselorToBlue() async {
+    await PlayerDB().addCounselor(GameInfo().roomName, "blueGroup");
+
+    this._room['blueGroup']['counselors'].add({
       'id': GameInfo().thisUser.uid,
       "name": GameInfo().thisUser.name,
     });
 
-    GameInfo().setRole = Roles.GUESSER_RED;
+    GameInfo().setRole = Roles.COUNSELOR_BLUE;
+  }
+
+  dynamic addCounselorToRed() async {
+    await PlayerDB().addCounselor(GameInfo().roomName, "redGroup");
+
+    this._room['redGroup']['counselors'].add({
+      'id': GameInfo().thisUser.uid,
+      "name": GameInfo().thisUser.name,
+    });
+
+    GameInfo().setRole = Roles.COUNSELOR_RED;
   }
 }

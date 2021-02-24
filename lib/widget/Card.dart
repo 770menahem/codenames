@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/Loading.dart';
-import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/words.dart';
 import 'package:provider/provider.dart';
@@ -26,18 +25,12 @@ class _MyCardState extends State<MyCard> {
   checkIfChoose(WordObj word) async {
     if (GameInfo().role == GameInfo().currUser.role &&
         GameInfo().currUser.role.toString().contains("G") &&
-        !word.choose &&
-        !GameInfo().isGameOver) {
+        !word.choose) {
       setState(() => loading = true);
 
-      try {
-        await WordDB().choosing(word);
-      } catch (e) {}
+      await this.widget.onChoose(this.widget.wordIndex);
 
-      this.widget.onChoose(this.widget.wordIndex);
-      setState(() {
-        loading = false;
-      });
+      setState(() => loading = false);
     }
   }
 

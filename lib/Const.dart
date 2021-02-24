@@ -5,7 +5,7 @@ import 'obj/GroupPoint.dart';
 import 'obj/words.dart';
 
 List color = [Colors.blue[400], Colors.red[400], Colors.black];
-List<String> img = ["img/capten.jpg", "img/player.jpg"];
+List<String> img = ["img/capten.jpg", "img/player.jpg", "img/counselors.jpg"];
 const String captain = "captain";
 const List<int> startPoint = [9, 8];
 enum Roles {
@@ -13,6 +13,8 @@ enum Roles {
   CAPTAIN_RED,
   GUESSER_RED,
   GUESSER_BLUE,
+  COUNSELOR_BLUE,
+  COUNSELOR_RED,
 }
 
 final BoxDecoration backgroundTheme = BoxDecoration(

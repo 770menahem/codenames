@@ -46,6 +46,8 @@ class GameInfo with ChangeNotifier {
   get pointsRed => this._pointsRed;
   get wordToFind => this._wordToFind;
 
+  get wordToFindDB async => await GameFLowDB().wordToFind();
+
   void reset() async {
     this._wordToFind = 0;
     this._pointsBlue = startPoint[0];
@@ -74,10 +76,10 @@ class GameInfo with ChangeNotifier {
     this._pointsRed = gameFlow['pointsRed'];
     this._showMap = false;
     this._clue = gameFlow['clue'];
-    this._playerTurn = gameFlow['playerTurn'];
+    this._playerTurn = gameFlow['playerTurn'] % 2;
     this._leftToGuessBlue = gameFlow['leftToGuessBlue'];
     this._leftToGuessRed = gameFlow['leftToGuessRed'];
-    this._groupTurn = gameFlow['groupTurn'];
+    this._groupTurn = gameFlow['groupTurn'] % 2;
     this._isGameOver = gameFlow['isGameOver'];
     this._hasLeft = gameFlow['hasLeft'];
     this._currUser = users[this.groupTurn][this.playerTurn];

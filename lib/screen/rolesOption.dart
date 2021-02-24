@@ -40,6 +40,12 @@ class _RoleOptionState extends State<RoleOption> {
         case Roles.GUESSER_RED:
           room.removeGuesser("redGroup");
           break;
+        case Roles.COUNSELOR_BLUE:
+          room.removeCounselor("blueGroup");
+          break;
+        case Roles.COUNSELOR_RED:
+          room.removeCounselor("redGroup");
+          break;
         default:
       }
 
@@ -92,15 +98,16 @@ class _RoleOptionState extends State<RoleOption> {
       body: StreamBuilder(
           stream: PlayerDB().collectionGame.snapshots(),
           builder: (context, snapshot) {
-            var blueCaptain;
-            var redCaptain;
-            var docRoom = snapshot.data.docChanges[0].doc;
+            var blueCaptain = Room().blueCaptain;
+            var redCaptain = Room().redCaptain;
+            var redGuesser = Room().redGuesser;
+            var blueGuesser = Room().blueGuesser;
             if (snapshot.hasData) {
+              var docRoom = snapshot.data.docChanges[0].doc;
               blueCaptain = docRoom['blueGroup']['captain'];
               redCaptain = docRoom['redGroup']['captain'];
-            } else {
-              blueCaptain = Room().blueCaptain;
-              redCaptain = Room().redCaptain;
+              blueGuesser = docRoom['blueGroup']['guesser'];
+              redGuesser = docRoom['redGroup']['guesser'];
             }
             return Container(
               decoration: backgroundTheme,
@@ -133,8 +140,26 @@ class _RoleOptionState extends State<RoleOption> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        btn("מנחש", 1, Colors.blue[600], room.addGuesserToBlue),
-                        btn("מנחש", 1, Colors.red[600], room.addGuesserToRed),
+                        blueGuesser.length == 0 ||
+                                blueGuesser['id'] == GameInfo().thisUser.uid
+                            ? btn("מנחש", 1, Colors.blue[600],
+                                room.addGuesserToBlue)
+                            : btn("מנחש", 1, Colors.blue[600].withOpacity(0.2),
+                                null),
+                        redGuesser.length == 0 ||
+                                redGuesser['id'] == GameInfo().thisUser.uid
+                            ? btn("מנחש", 1, Colors.red[600],
+                                room.addGuesserToRed)
+                            : btn("מנחש", 1, Colors.red[600].withOpacity(0.2),
+                                null),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        btn("יועץ", 2, Colors.blue[600],
+                            room.addCounselorToBlue),
+                        btn("יועץ", 2, Colors.red[600], room.addCounselorToRed),
                       ],
                     ),
                   ],
