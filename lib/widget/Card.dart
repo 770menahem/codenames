@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/Loading.dart';
+import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/words.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,10 @@ class _MyCardState extends State<MyCard> {
         !word.choose) {
       setState(() => loading = true);
 
-      await this.widget.onChoose(this.widget.wordIndex);
+      try {
+        await WordDB().choosing(word);
+        await this.widget.onChoose(this.widget.wordIndex);
+      } catch (e) {}
 
       setState(() => loading = false);
     }

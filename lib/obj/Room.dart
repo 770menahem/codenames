@@ -27,6 +27,7 @@ class Room extends ChangeNotifier {
   };
 
   get blueCaptain => this._room['blueGroup']['captain'];
+  get owner => this._room['owner']['id'];
 
   get redCaptain => this._room['redGroup']['captain'];
   get redGuesser => this._room['redGroup']['guesser'];
@@ -93,6 +94,7 @@ class Room extends ChangeNotifier {
   }
 
   dynamic setCaptainToBlue() async {
+    GameInfo().thisUser.giveRole(Roles.CAPTAIN_BLUE);
     await PlayerDB().addCaptain(GameInfo().roomName, 'blueGroup');
 
     this._room['blueGroup']['captain'] = {
@@ -104,6 +106,7 @@ class Room extends ChangeNotifier {
   }
 
   dynamic setCaptainToRed() async {
+    GameInfo().thisUser.giveRole(Roles.CAPTAIN_RED);
     await PlayerDB().addCaptain(GameInfo().roomName, 'redGroup');
 
     this._room['redGroup']['captain'] = {
@@ -114,6 +117,7 @@ class Room extends ChangeNotifier {
   }
 
   dynamic addGuesserToBlue() async {
+    GameInfo().thisUser.giveRole(Roles.GUESSER_BLUE);
     await PlayerDB().addGuesser(GameInfo().roomName, "blueGroup");
 
     this._room['blueGroup']['guesser'] = {
@@ -125,6 +129,7 @@ class Room extends ChangeNotifier {
   }
 
   dynamic addGuesserToRed() async {
+    GameInfo().thisUser.giveRole(Roles.GUESSER_RED);
     await PlayerDB().addGuesser(GameInfo().roomName, "redGroup");
 
     this._room['redGroup']['guesser'] = {
@@ -136,6 +141,7 @@ class Room extends ChangeNotifier {
   }
 
   dynamic addCounselorToBlue() async {
+    GameInfo().thisUser.giveRole(Roles.COUNSELOR_BLUE);
     await PlayerDB().addCounselor(GameInfo().roomName, "blueGroup");
 
     this._room['blueGroup']['counselors'].add({
@@ -147,6 +153,7 @@ class Room extends ChangeNotifier {
   }
 
   dynamic addCounselorToRed() async {
+    GameInfo().thisUser.giveRole(Roles.COUNSELOR_RED);
     await PlayerDB().addCounselor(GameInfo().roomName, "redGroup");
 
     this._room['redGroup']['counselors'].add({

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/firebase/service/Database.dart';
 import 'package:newkodenames/firebase/service/WordDb.dart';
+import 'package:newkodenames/obj/Room.dart';
 import 'package:provider/provider.dart';
 
 import 'package:newkodenames/firebase/service/GameFlowDb.dart';
@@ -71,30 +73,28 @@ class _GameState extends State<Game> {
   }
 
   _handleChoice(int wordIndex) async {
-    WordObj word = GameInfo().words[wordIndex];
+    Color wordColor = GameInfo().words[wordIndex].color;
 
-    if (word.color == color[2]) {
+    if (wordColor == color[2]) {
       GameInfo().isGameOver = true;
       return;
     }
-    if (word.color != color[GameInfo().currUser.group]) {
+    if (wordColor != color[GameInfo().currUser.group]) {
       GameInfo().groupTurn == 0
           ? GameInfo().leftToGuessBlue = GameInfo().wordToFind
           : GameInfo().leftToGuessRed = GameInfo().wordToFind;
     }
 
-    updatePoints(word.color);
+    updatePoints(wordColor);
 
-    if ((word.color != color[GameInfo().currUser.group] ||
+    if ((wordColor != color[GameInfo().currUser.group] ||
         GameInfo().wordToFind <= 1)) {
       _incrementTurn();
       GameInfo().setClue = "";
       GameInfo().setWordToFind = -GameInfo().wordToFind;
     } else {
-      GameInfo().setWordToFind = 0;
+      GameInfo().setWordToFind = -1;
     }
-
-    await WordDB().choosing(word);
   }
 
   void updatePoints(Color wordColor) {
@@ -112,11 +112,12 @@ class _GameState extends State<Game> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          FlatButton(
-            color: Colors.blueGrey[700],
-            child: Text("משחק חדש"),
-            onPressed: _newGame,
-          ),
+          if (GameInfo().thisUser.uid == Room().owner)
+            FlatButton(
+              color: Colors.blueGrey[700],
+              child: Text("משחק חדש"),
+              onPressed: _newGame,
+            ),
           SizedBox(
             width: 1.0,
           ),

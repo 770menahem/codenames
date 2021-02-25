@@ -109,6 +109,11 @@ class PlayerDB {
     });
   }
 
+  ownerUid() async {
+    DocumentSnapshot doc = await collectionGame.doc(GameInfo().roomName).get();
+    return doc['owner']['id'];
+  }
+
   Stream<DocumentSnapshot> get room =>
       collectionGame.doc(GameInfo().roomName).snapshots();
 }

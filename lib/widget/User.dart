@@ -10,6 +10,7 @@ class User extends StatelessWidget {
   Widget build(BuildContext context) {
     final userName = Provider.of<MyUser>(context).name;
     final playerTurn = Provider.of<GameInfo>(context).playerTurn;
+    final groupTurn = Provider.of<GameInfo>(context).groupTurn;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -38,16 +39,26 @@ class User extends StatelessWidget {
               SizedBox(
                 width: 10,
               ),
-              Text(
-                "$userName",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              Column(
+                children: [
+                  Text('תור'),
+                  Text(
+                    "${roleSrt[GameInfo().currUser.role.index]}",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ],
               ),
               SizedBox(
-                width: 10,
+                width: 20,
               ),
-              Text(
-                "${GameInfo().currUser.group + 1} :קבוצה",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              Column(
+                children: [
+                  Text('תפקידך'),
+                  Text(
+                    "${roleSrt[GameInfo().thisUser.role.index]}",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ],
               ),
             ],
           ),
