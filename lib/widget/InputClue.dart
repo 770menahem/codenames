@@ -16,6 +16,7 @@ class InputClue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
+      shape: StadiumBorder(),
       color: Colors.amberAccent,
       child: Text("רמז"),
       onPressed: () {
@@ -91,6 +92,7 @@ clueForm(
         ),
         actions: [
           FlatButton(
+            shape: StadiumBorder(),
             child: Text(
               "אישור",
               textDirection: TextDirection.rtl,

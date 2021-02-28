@@ -71,7 +71,7 @@ class _SignInState extends State<SignIn> {
                   space,
                   Text(error),
                   space,
-                  btnWidth(
+                  btnApp(
                     SizedBox(
                       width: 80.0,
                       child: Center(
@@ -101,7 +101,7 @@ class _SignInState extends State<SignIn> {
                     loading: loadingStatus,
                     error: errorMsg,
                   ),
-                  btnWidth(
+                  btnApp(
                     Text(
                       'הירשם',
                       style: TextStyle(color: Colors.white),

@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newkodenames/firebase/service/Database.dart';
-import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/obj/Room.dart';
 import 'package:provider/provider.dart';
 
 import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/ClueStatus.dart';
-import 'package:newkodenames/obj/words.dart';
 import '../Const.dart';
 import '../widget/Board.dart';
 import '../widget/CaptainMap.dart';
@@ -114,6 +111,7 @@ class _GameState extends State<Game> {
         children: [
           if (GameInfo().thisUser.uid == Room().owner)
             FlatButton(
+              shape: StadiumBorder(),
               color: Colors.blueGrey[700],
               child: Text("משחק חדש"),
               onPressed: _newGame,

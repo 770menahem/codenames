@@ -112,16 +112,11 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                           ),
-                          btnWidth(
-                            SizedBox(
-                              width: 80.0,
-                              child: Center(
-                                child: Text(
-                                  'הירשם',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
+                          btnApp(
+                            Text(
+                              'הירשם',
+                              style: TextStyle(
+                                color: Colors.white,
                               ),
                             ),
                             Colors.pink,

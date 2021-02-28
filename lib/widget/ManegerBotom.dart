@@ -28,6 +28,7 @@ class MangerButton extends StatelessWidget {
             ? FlatButton(
                 minWidth: 110.0,
                 color: Colors.amberAccent,
+                shape: StadiumBorder(),
                 child: showmap ? Text("הסתר מפה") : Text("הצג מפה"),
                 onPressed: () {
                   GameInfo().changeShowMap();
@@ -43,6 +44,7 @@ class MangerButton extends StatelessWidget {
             : (!role.toString().contains("CAPTAIN") &&
                     GameInfo().role == GameInfo().currUser.role)
                 ? FlatButton(
+                    shape: StadiumBorder(),
                     color: Colors.blueGrey,
                     onPressed: () {
                       GameInfo().currUser.group == 0

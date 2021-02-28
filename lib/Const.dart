@@ -70,18 +70,14 @@ joinGame() async {
   GameInfo().join();
 }
 
-SizedBox btnWidth(Widget child, Color color, Function onPressed) {
+SizedBox btnApp(Widget child, Color color, Function onPressed) {
   return SizedBox(
     width: 150.0,
-    child: Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-      ),
-      child: RaisedButton(
-        child: child,
-        color: color,
-        onPressed: onPressed,
-      ),
+    child: FlatButton(
+      shape: StadiumBorder(),
+      color: color,
+      child: child,
+      onPressed: onPressed,
     ),
   );
 }

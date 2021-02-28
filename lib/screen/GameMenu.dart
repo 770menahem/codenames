@@ -12,28 +12,28 @@ class GameMenu extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          btnWidth(
+          btnApp(
             Text("היכנס למשחק"),
             Colors.indigo[50],
             () {
               Navigator.pushNamed(context, '/joinroom');
             },
           ),
-          btnWidth(
+          btnApp(
             Text("צור משחק"),
             Colors.indigo[50],
             () {
               Navigator.pushNamed(context, "/newroom");
             },
           ),
-          btnWidth(
+          btnApp(
             Text("צור/הסר מילים"),
             Colors.indigo[50],
             () {
               Navigator.pushNamed(context, "/addWord");
             },
           ),
-          btnWidth(
+          btnApp(
             Text("התנתק"),
             Colors.indigo[50],
             () {

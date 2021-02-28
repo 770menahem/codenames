@@ -41,30 +41,6 @@ class _AddWordState extends State<AddWord> {
         controllers[i].text = AddWord.wordToAdd[i];
     }
 
-    // List<FlatButton> actionBtn = [
-    //   FlatButton.icon(
-    //     color: Colors.green,
-    //     icon: Icon(Icons.save),
-    //     onPressed: () {
-    //       addToList();
-    //       Navigator.pop(context);
-    //     },
-    //     label: Text("הוסף"),
-    //   ),
-    //   FlatButton.icon(
-    //     color: Colors.red,
-    //     icon: Icon(Icons.delete_forever),
-    //     onPressed: () {
-    //       WordObj().clearList();
-    //       AddWord.wordToAdd.clear();
-    //       setState(() {
-    //         controllers.clear();
-    //       });
-    //     },
-    //     label: Text("אפס"),
-    //   ),
-    // ];
-
     Container gridBoard = Container(
       height: 400,
       margin: EdgeInsets.symmetric(vertical: 12.0),
@@ -110,8 +86,7 @@ class _AddWordState extends State<AddWord> {
                 children: [
                   FlatButton.icon(
                     color: Colors.green,
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
+                    shape: StadiumBorder(),
                     icon: Icon(Icons.save),
                     onPressed: () {
                       addToList();
@@ -120,8 +95,7 @@ class _AddWordState extends State<AddWord> {
                     label: Text("הוסף"),
                   ),
                   FlatButton.icon(
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
+                    shape: StadiumBorder(),
                     color: Colors.red,
                     icon: Icon(Icons.delete_forever),
                     onPressed: () {

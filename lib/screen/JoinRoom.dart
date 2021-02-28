@@ -63,16 +63,11 @@ class _JoinRoomState extends State<JoinRoom> {
                         ),
                         SizedBox(
                           height: 40.0,
-                          child: btnWidth(
-                            SizedBox(
-                              width: 80.0,
-                              child: Center(
-                                child: Text(
-                                  'הצטרף',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
+                          child: btnApp(
+                            Text(
+                              'הצטרף',
+                              style: TextStyle(
+                                color: Colors.white,
                               ),
                             ),
                             Colors.pink,

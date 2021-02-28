@@ -1,6 +1,3 @@
-// למחוק מילים
-// let words longer than one
-// add words longer than one
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/firebase/service/Database.dart';
@@ -60,6 +57,7 @@ class _RoleOptionState extends State<RoleOption> {
         width: 150.0,
         margin: EdgeInsets.all(10.0),
         child: FlatButton(
+          shape: StadiumBorder(),
           height: 50.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -83,9 +81,6 @@ class _RoleOptionState extends State<RoleOption> {
               }
             }
           },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.0),
-          ),
         ),
       );
     }

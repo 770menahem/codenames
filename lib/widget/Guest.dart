@@ -12,7 +12,7 @@ class Guest extends StatelessWidget {
   const Guest({Key key, this.loading, this.auth, this.error}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return btnWidth(
+    return btnApp(
       Text(
         'היכנס כאורח',
         style: TextStyle(color: Colors.white),
