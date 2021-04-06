@@ -1,16 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
-import 'package:newkodenames/obj/MyUser.dart';
 import 'package:provider/provider.dart';
 import '../Const.dart';
 
 class User extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final userName = Provider.of<MyUser>(context).name;
     final playerTurn = Provider.of<GameInfo>(context).playerTurn;
-    final groupTurn = Provider.of<GameInfo>(context).groupTurn;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

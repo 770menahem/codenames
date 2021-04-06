@@ -41,8 +41,6 @@ class Room extends ChangeNotifier {
     _room['blueGroup'] = data['blueGroup'];
     _room['redGroup'] = data['redGroup'];
     _room['name'] = roomName;
-    print(data);
-    print(_room);
   }
 
   void removeCaptain(String group) {
@@ -88,9 +86,7 @@ class Room extends ChangeNotifier {
       };
 
       return res;
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   dynamic setCaptainToBlue() async {

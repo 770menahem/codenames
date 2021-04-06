@@ -6,6 +6,8 @@ import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/words.dart';
 import 'package:provider/provider.dart';
 
+import '../Const.dart';
+
 class MyCard extends StatefulWidget {
   final int wordIndex;
   final Function onChoose;
@@ -21,20 +23,27 @@ class MyCard extends StatefulWidget {
 }
 
 class _MyCardState extends State<MyCard> {
-  bool loading = false;
+  bool loading = cardLoading;
 
   checkIfChoose(WordObj word) async {
     if (GameInfo().role == GameInfo().currUser.role &&
         GameInfo().currUser.role.toString().contains("G") &&
-        !word.choose) {
-      setState(() => loading = true);
+        !word.choose &&
+        !cardLoading) {
+      setState(() {
+        cardLoading = true;
+        loading = true;
+      });
 
       try {
         await WordDB().choosing(word);
         await this.widget.onChoose(this.widget.wordIndex);
       } catch (e) {}
 
-      setState(() => loading = false);
+      setState(() {
+        cardLoading = false;
+        loading = false;
+      });
     }
   }
 

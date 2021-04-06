@@ -22,7 +22,6 @@ class _RoleOptionState extends State<RoleOption> {
 
   void clearRole() {
     Roles role = GameInfo().role;
-    print("role = " + role.toString());
     if (role != null) {
       switch (role) {
         case Roles.CAPTAIN_BLUE:
@@ -76,9 +75,7 @@ class _RoleOptionState extends State<RoleOption> {
 
                 Navigator.pushNamed(context, '/game')
                     .then((value) => clearRole());
-              } catch (e) {
-                print(e);
-              }
+              } catch (e) {}
             }
           },
         ),

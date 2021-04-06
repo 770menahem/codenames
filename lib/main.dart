@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/Const.dart';
 import 'package:newkodenames/firebase/service/authService.dart';
 import 'package:newkodenames/obj/MyUser.dart';
+import 'package:newkodenames/screen/ChatPage.dart';
 import 'package:newkodenames/screen/GameMenu.dart';
 import 'package:newkodenames/screen/HomePage.dart';
 import 'package:newkodenames/screen/JoinRoom.dart';
@@ -51,6 +53,7 @@ class MyApp extends StatelessWidget {
           "/roles": (BuildContext context) => RoleOption(),
           "/newroom": (BuildContext context) => NewRoom(),
           "/joinroom": (BuildContext context) => JoinRoom(),
+          "/chat": (BuildContext context) => ChatPage(),
         },
       ),
     );

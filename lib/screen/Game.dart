@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/firebase/service/ChatDb.dart';
 import 'package:newkodenames/obj/Room.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,7 @@ class _GameState extends State<Game> {
   void initState() {
     super.initState();
     GameFLowDB().snapShotFlow();
+    ChatDb().snapShotFlow();
   }
 
   _newGame() {
@@ -70,12 +72,14 @@ class _GameState extends State<Game> {
   }
 
   _handleChoice(int wordIndex) async {
+    Color endGame = color[2];
     Color wordColor = GameInfo().words[wordIndex].color;
 
-    if (wordColor == color[2]) {
+    if (wordColor == endGame) {
       GameInfo().isGameOver = true;
       return;
     }
+
     if (wordColor != color[GameInfo().currUser.group]) {
       GameInfo().groupTurn == 0
           ? GameInfo().leftToGuessBlue = GameInfo().wordToFind
@@ -230,11 +234,20 @@ class _GameState extends State<Game> {
         });
   }
 
+  Widget chat() {
+    return Align(
+      alignment: FractionalOffset.bottomCenter,
+      child: MaterialButton(
+        onPressed: () => {},
+        child: Text('REGISTER LOGIN'),
+      ),
+    );
+  }
+
   Widget endGameMsg(DocumentSnapshot doc, BuildContext context) {
+    String groupmsg = GameInfo().currUser.group == 0 ? "הכחולה" : "האדומה";
     if (doc != null && doc['isGameOver']) {
-      return endGameWidget(
-          context,
-          "המשחק נגמר קבוצה: ${GameInfo().currUser.group + 1} הפסידה",
+      return endGameWidget(context, "המשחק נגמר הקבוצה $groupmsg הפסידה",
           color[GameInfo().currUser.group]);
     } else if ((GameInfo().pointsBlue == 0)) {
       return endGameWidget(context, "הכחולים ניצחו", color[0]);

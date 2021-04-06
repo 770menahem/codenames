@@ -83,7 +83,6 @@ class _JoinRoomState extends State<JoinRoom> {
                                   Navigator.pushNamed(context, "/roles");
                                   joinGame();
                                 } catch (e) {
-                                  print(e);
                                   setState(() {
                                     loading = false;
                                     error = 'חדר לא קיים';

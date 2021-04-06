@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:newkodenames/firebase/service/ChatDb.dart';
 import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
@@ -23,6 +24,7 @@ class PlayerDB {
       DocumentReference snap = collectionGame.doc(name);
 
       if (snap != null) {
+        ChatDb().createChat();
         WordDB().createWords();
         GameFLowDB().createGameInfo();
         await collectionGame.doc(name).set({
@@ -48,7 +50,6 @@ class PlayerDB {
         return false;
       }
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -56,25 +57,19 @@ class PlayerDB {
   Future delCaptain(String room, String group) async {
     try {
       await collectionGame.doc(room).update({'$group.captain': {}});
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   Future delGuesser(String room, String group) async {
     try {
       await collectionGame.doc(room).update({'$group.guesser': {}});
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   Future delCounselor(String room, String group, counselor) async {
     try {
       await collectionGame.doc(room).update({'$group.counselors': counselor});
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   Future addCaptain(String room, String group) async {

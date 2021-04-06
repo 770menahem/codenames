@@ -22,7 +22,6 @@ class _AddWordState extends State<AddWord> {
         if (controller.text.length > 0) {
           if (!AddWord.wordToAdd.contains(controller.text)) {
             AddWord.wordToAdd.add(controller.text);
-            print(controller.text);
           }
         }
       },

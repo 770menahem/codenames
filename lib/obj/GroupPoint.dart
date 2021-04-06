@@ -28,6 +28,7 @@ class GameInfo with ChangeNotifier {
   UserObj _currUser;
   String _roomName;
   MyUser _thisUser;
+  bool _newMsg = false;
 
   get isGameOver => this._isGameOver;
   get groupTurn => this._groupTurn;
@@ -45,6 +46,7 @@ class GameInfo with ChangeNotifier {
   get pointsBlue => this._pointsBlue;
   get pointsRed => this._pointsRed;
   get wordToFind => this._wordToFind;
+  get newMsg => this._newMsg;
 
   get wordToFindDB async => await GameFLowDB().wordToFind();
 
@@ -62,6 +64,7 @@ class GameInfo with ChangeNotifier {
     this._hasLeft = false;
     this._currUser = users[0][0];
     this._words = convertToWordObj(await WordDB().getWords());
+    this._newMsg = false;
     GameFLowDB().createGameInfo();
   }
 
@@ -103,6 +106,11 @@ class GameInfo with ChangeNotifier {
   set setClue(String newClue) {
     this._clue = newClue;
     GameFLowDB().changeClue();
+    notifyListeners();
+  }
+
+  set newMsg(bool val) {
+    this._newMsg = val;
     notifyListeners();
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'firebase/service/WordDb.dart';
-import 'firebase/service/authService.dart';
 import 'obj/GroupPoint.dart';
 import 'obj/words.dart';
 
@@ -8,6 +7,9 @@ List color = [Colors.blue[400], Colors.red[300], Colors.black];
 List<String> img = ["img/capten.jpg", "img/player.jpg", "img/counselors.jpg"];
 const String captain = "captain";
 const List<int> startPoint = [9, 8];
+bool cardLoading = false;
+bool newMsg = false;
+
 enum Roles {
   CAPTAIN_BLUE,
   CAPTAIN_RED,
@@ -55,18 +57,12 @@ List<WordObj> convertToWordObj(List word) {
 }
 
 newGame() async {
-  print("new game");
-  print(AuthService().name);
-
-  await WordDB().addWords(WordObj().getWords());
+  await WordDB().addWords(await WordObj().getWords());
 
   GameInfo().reset();
 }
 
 joinGame() async {
-  print("join game");
-  print(AuthService().name);
-
   GameInfo().join();
 }
 

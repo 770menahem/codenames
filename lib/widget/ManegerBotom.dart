@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
+import 'package:newkodenames/obj/Room.dart';
+import 'package:newkodenames/widget/ChatBtn.dart';
 import 'package:newkodenames/widget/InputClue.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +26,15 @@ class MangerButton extends StatelessWidget {
         SizedBox(
           height: 5,
         ),
+        if (GameInfo().thisUser.uid == Room().owner)
+          FlatButton(
+            shape: StadiumBorder(),
+            color: Colors.amberAccent,
+            child: Text("צור/הסר מילים"),
+            onPressed: () {
+              Navigator.pushNamed(context, "/addWord");
+            },
+          ),
         role.toString().contains("CAPTAIN")
             ? FlatButton(
                 minWidth: 110.0,
@@ -55,6 +66,7 @@ class MangerButton extends StatelessWidget {
                     child: Text('סיים תור'),
                   )
                 : Text(""),
+        ChatBtn(),
       ],
     );
   }

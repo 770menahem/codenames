@@ -32,7 +32,6 @@ class AuthService {
       GameInfo().thisUser = myUser;
       return myUser;
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -47,7 +46,6 @@ class AuthService {
       GameInfo().thisUser = myUser;
       return myUser;
     } catch (e) {
-      print(e);
       return null;
     }
   }
@@ -56,7 +54,6 @@ class AuthService {
     try {
       return _auth.signOut();
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -64,8 +61,6 @@ class AuthService {
   Future registerWithEmailAndPassword(
       String name, String email, String password) async {
     try {
-      print(name);
-      print(email);
       UserCredential res = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = res.user;
@@ -76,7 +71,6 @@ class AuthService {
       GameInfo().thisUser = myUser;
       return myUser;
     } catch (e) {
-      print(e);
       return null;
     }
   }

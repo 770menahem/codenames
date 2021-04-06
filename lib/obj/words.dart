@@ -1,100 +1,5 @@
 import 'package:flutter/material.dart';
-
-class Words {
-  List words = [
-    "תרץ",
-    "וויניקי אל",
-    "מפקד",
-    "רשצ",
-    "מגמה",
-    "תיכנות",
-    "קורס",
-    "רמת גן",
-    "פתח תקוה",
-    "סקסופון",
-    "סיכה",
-    "תיקשוב",
-    "מודיעין",
-    "חיל האויר",
-    "תגית",
-    "מסדר",
-    "סקירה",
-    "טכנולוגיה",
-    "תשמ\"ש",
-    "שקם",
-    "חמשוש",
-    "זיכוי",
-    "חוגר",
-    "קורונה",
-    "יד לבנים",
-    "אייל קורא",
-    "פרוקסי",
-    "וויל",
-    "יום ספורט",
-    "חינוכית",
-    "מיקצועית",
-    "מסיכה",
-    "חנוכה",
-    "דף יומי",
-    "חדר אוכל",
-    "פקקים",
-    "אפריקה",
-    "אירופה",
-    "בורסה",
-    "פס",
-    "חנתר",
-    "ג'אבה",
-    "אטמבלר",
-    "קוד",
-    "בנין",
-    "סייבר",
-    "מכונה",
-    "מ\"ל",
-    "למ\"א",
-    "ל\"ע",
-    "סוף יום",
-    "נוהל",
-    "החרגה",
-    "שבוע",
-    "נעול",
-    "מחט",
-    "גולם",
-    "קש",
-    "שלג",
-    "כפתור",
-    "מחלה",
-    "עמוד",
-    "רב",
-    "פירמידה",
-    "לב",
-    "מסך",
-    "מושב",
-    "טבליה",
-    "מרגל",
-    "כוכב",
-    "גוש",
-    "פה",
-    "מתג",
-    "עדשה",
-    "שלט",
-    "גבול",
-    "אביב",
-    "שוק",
-    "מכסה",
-    "רשת",
-    "ירוק",
-    "נסיכה",
-    "חומה",
-    "סוכן",
-    "מיטה",
-    "דוקטור",
-    "לפיד",
-  ];
-
-  List getList() {
-    return words;
-  }
-}
+import 'package:newkodenames/firebase/service/WordListDB.dart';
 
 class WordObj {
   int id;
@@ -103,6 +8,7 @@ class WordObj {
   Color color;
   static List<WordObj> gameWords = List();
   static List<WordObj> userWord = List();
+  static List allWords;
 
   WordObj({
     this.id,
@@ -123,15 +29,18 @@ class WordObj {
     });
   }
 
-  List getWords() {
+  Future<List> getWords() async {
     List<Color> colors = [
       Colors.blue[400],
-      Colors.red[400],
+      Colors.red[300],
       Colors.black,
       Colors.white70
     ];
 
-    List allWords = Words().getList();
+    if (allWords == null) {
+      allWords = await WordListDB().getWords();
+    }
+
     gameWords.clear();
 
     userWord.forEach((e) => e.choose = false);
