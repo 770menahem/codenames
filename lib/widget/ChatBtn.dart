@@ -16,7 +16,7 @@ class ChatBtn extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           Icon(
-            Icons.messenger_sharp,
+            Icons.messenger,
             color: Colors.blue,
           ),
           if (newMsg)
@@ -25,7 +25,7 @@ class ChatBtn extends StatelessWidget {
               right: 0.0,
               child: Icon(
                 Icons.brightness_1,
-                size: 8.0,
+                size: 10.0,
                 color: Colors.redAccent,
               ),
             )
@@ -33,7 +33,8 @@ class ChatBtn extends StatelessWidget {
       ),
       onPressed: () {
         GameInfo().newMsg = false;
-        Navigator.pushNamed(context, '/chat');
+        Navigator.pushNamed(context, '/chat')
+            .then((value) => GameInfo().newMsg = false);
       },
     );
   }

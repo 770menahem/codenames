@@ -26,7 +26,6 @@ class _GameState extends State<Game> {
   void initState() {
     super.initState();
     GameFLowDB().snapShotFlow();
-    ChatDb().snapShotFlow();
   }
 
   _newGame() {

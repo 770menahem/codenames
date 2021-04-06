@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newkodenames/firebase/service/ChatDb.dart';
 import 'package:newkodenames/firebase/service/Database.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/obj/Room.dart';
@@ -18,6 +19,7 @@ class _RoleOptionState extends State<RoleOption> {
       clearRole();
     }
     super.initState();
+    ChatDb().snapShotFlow();
   }
 
   void clearRole() {

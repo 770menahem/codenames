@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:newkodenames/Const.dart';
+import 'package:flutter/services.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 
 class ChatDb {
@@ -19,10 +19,10 @@ class ChatDb {
     }
   }
 
-  Future addMsgs(String user, String msg) async {
+  Future addMsgs(String user, String msg, int group) async {
     await collectionChat.doc('chat').update({
       'messages': FieldValue.arrayUnion([
-        {'user': user, 'message': msg}
+        {'user': user, 'message': msg, 'group': group}
       ])
     });
   }
@@ -30,7 +30,6 @@ class ChatDb {
   void snapShotFlow() {
     collectionChat.doc('chat').snapshots().listen((querySnapshot) {
       GameInfo().newMsg = true;
-      print('d');
     });
   }
 }
