@@ -56,9 +56,10 @@ class ChatPage extends StatelessWidget {
                         Expanded(
                           child: TextField(
                             controller: msg,
+                            textAlign: TextAlign.right,
                             textDirection: TextDirection.rtl,
                             decoration: InputDecoration(
-                                hintText: "הכנס הודעה...",
+                                hintText: "...הכנס הודעה",
                                 // hint dir
                                 hintStyle: TextStyle(color: Colors.black54),
                                 border: InputBorder.none),

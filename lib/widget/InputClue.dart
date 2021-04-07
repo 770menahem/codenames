@@ -59,6 +59,7 @@ clueForm(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
+                textAlign: TextAlign.right,
                 textDirection: TextDirection.rtl,
                 controller: clueController,
                 validator: (value) =>
@@ -71,6 +72,7 @@ clueForm(
                 autofocus: true,
               ),
               TextFormField(
+                textAlign: TextAlign.right,
                 controller: numController,
                 textDirection: TextDirection.rtl,
                 keyboardType: TextInputType.number,
