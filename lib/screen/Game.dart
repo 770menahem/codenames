@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/obj/GroupPoint.dart';
 import 'package:newkodenames/widget/ClueStatus.dart';
+import 'package:vibration/vibration.dart';
 import '../Const.dart';
 import '../widget/Board.dart';
 import '../widget/CaptainMap.dart';
@@ -22,10 +25,35 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  Timer timer;
+  Roles roleChecked;
+
   @override
   void initState() {
     super.initState();
     GameFLowDB().snapShotFlow();
+
+    timer = Timer.periodic(Duration(milliseconds: 500), (Timer t) {
+      vibrate();
+    });
+  }
+
+  void vibrate() async {
+    if (roleChecked != GameInfo().currUser.role) {
+      if (GameInfo().currUser.role == GameInfo().thisUser.role) {
+        if (await Vibration.hasVibrator()) {
+          Vibration.vibrate();
+        }
+      }
+
+      roleChecked = GameInfo().currUser.role;
+    }
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   _newGame() {
@@ -182,6 +210,7 @@ class _GameState extends State<Game> {
           if (snapshot.hasData) {
             doc = snapshot.data.docChanges[0].doc;
           }
+
           return Container(
             decoration: backgroundTheme,
             child: Scaffold(

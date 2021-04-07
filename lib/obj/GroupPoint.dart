@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:newkodenames/firebase/service/GameFlowDb.dart';
 import 'package:newkodenames/firebase/service/WordDb.dart';
 import 'package:newkodenames/obj/words.dart';
+import 'package:vibration/vibration.dart';
 
 import '../Const.dart';
 import 'MyUser.dart';
@@ -62,7 +63,7 @@ class GameInfo with ChangeNotifier {
     this._groupTurn = 0;
     this._isGameOver = false;
     this._hasLeft = false;
-    this._currUser = users[0][0];
+    this.currUser = users[0][0];
     this._words = convertToWordObj(await WordDB().getWords());
     this._newMsg = false;
     GameFLowDB().createGameInfo();
@@ -85,7 +86,7 @@ class GameInfo with ChangeNotifier {
     this._groupTurn = gameFlow['groupTurn'] % 2;
     this._isGameOver = gameFlow['isGameOver'];
     this._hasLeft = gameFlow['hasLeft'];
-    this._currUser = users[this.groupTurn][this.playerTurn];
+    this.currUser = users[this.groupTurn][this.playerTurn];
   }
 
   void changeShowMap() {
@@ -110,6 +111,10 @@ class GameInfo with ChangeNotifier {
   }
 
   set newMsg(bool val) {
+    if (val && !this._newMsg) {
+      Vibration.vibrate(duration: 20);
+    }
+
     this._newMsg = val;
     notifyListeners();
   }
